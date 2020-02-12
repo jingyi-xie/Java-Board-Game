@@ -24,7 +24,7 @@ public class BoardDisplay {
     System.out.print(col_index);
     System.out.println();
   }
-  public void display() {
+ public void display() {
     printNum();
     LineDisplay ld_a = new LineDisplay(board_a);
     LineDisplay ld_b = new LineDisplay(board_b);

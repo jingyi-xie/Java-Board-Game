@@ -29,5 +29,5 @@ public class LineDisplay {
       }
       System.out.print(" " + (char)letter);
     }
-  }
+}
 
