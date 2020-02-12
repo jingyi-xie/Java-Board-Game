@@ -5,6 +5,9 @@ public class BoardDisplay {
   public BoardDisplay(Board b) {
       this.board = b;
   }
+  public void refresh(Board b) {
+      this.board = b;
+  }
   public void display() {
     char[] col_index = {' ', ' ','0', '|', '1', '|', '2', '|', '3', '|', '4', '|', '5', '|', '6', '|', '7', '|', '8', '|', '9', ' ', ' '};
     System.out.println(col_index);

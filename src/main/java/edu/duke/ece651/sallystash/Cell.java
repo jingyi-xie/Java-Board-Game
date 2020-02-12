@@ -5,12 +5,14 @@ public class Cell {
   private boolean isPlaced;
   private boolean isHit;
   private boolean isMiss;
+  private int stashId;
 
   public Cell() {
-    this.color = '=';
+    this.color = ' ';
     this.isPlaced = false;
     this.isHit = false;
     this.isMiss = false;
+    this.stashId = -1;
   }
   public void setColor(char c) {
     this.color = c;
@@ -35,5 +37,11 @@ public class Cell {
   }
   public boolean getIsMiss() {
     return this.isMiss;
+  }
+  public void setStashId(int id) {
+    this.stashId = id;
+  }
+  public int getStashId() {
+    return this.stashId;
   }
 }
