@@ -1,3 +1,0 @@
-interface Shape {
-  void putOnBoard(int x, int y, Board bd);
-}

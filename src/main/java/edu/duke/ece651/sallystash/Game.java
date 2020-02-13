@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-  final int BOARD_A = 0;
-  final int BOARD_B = 1;
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
 
@@ -18,54 +16,79 @@ public class Game {
     boards.add(new Board());
     this.curId = 1;
   }
-  public void placeStash(int player_num, int board_num, String color, int times) {
+  public void placeStash(int player_num, String color, int times, BoardDisplay bdis) {
     String num[] = {"first", "second", "third"};
     String player[] = {"Player A", "Player B"};
     char color_draw;
+    int length, height;
     if (color == "Green") {
       color_draw = 'G';
-    }
+      length = 2;
+      height = 1;
+    } 
     else if (color == "Purple") {
       color_draw = 'P';
+      length = 3;
+      height = 1;
     }
     else if (color == "Red") {
       color_draw = 'R';
-    }
-    else if (color == "Blue") {
-      color_draw = 'B';
+      length = 4;
+      height = 1;
     }
     else {
-      color_draw = ' ';
+      color_draw = 'B';
+      length = 6;
+      height = 1;
     }
-    for (int i = 0; i < times; i++) {
+    int i = 0;
+    while (i < times) {
+      Scanner scan = new Scanner(System.in);
+      System.out.println("-------------------------------------------------------------------------");
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
-      Scanner scan_i = new Scanner(System.in);
-      System.out.println("Enter i");
-      int row = -1, col = -1;
-      if(scan_i.hasNextInt()) {
-        row = scan_i.nextInt();
+      System.out.println("-------------------------------------------------------------------------");
+      String input = scan.next();
+      Parser myParser = new Parser(input);
+      i++;
+      if (myParser.isValid()) {
+        int row = myParser.getRow();
+        int col = myParser.getCol();
+        Rectangle rec;
+        if (myParser.getDir()) {
+          rec = new Rectangle(this.curId, color_draw, height, length);
+        }
+        else {
+          rec = new Rectangle(this.curId, color_draw, length, height);
+        }
+        this.curId++;
+        boolean result = rec.putOnBoard(row, col, boards.get(player_num));
+        if (!result) {
+          System.out.println("=========================================================================");
+          System.out.println("                       Invalid location, try again!                      ");
+          System.out.println("=========================================================================");
+          i--;
+        }
       }
-      Scanner scan_j = new Scanner(System.in);
-      System.out.println("Enter j");
-      if(scan_j.hasNextInt()) {
-        col = scan_j.nextInt();
+      else {
+        System.out.println("=========================================================================");
+        System.out.println("                       Invalid input, try again!                         ");
+        System.out.println("=========================================================================");
+        i--;
       }
-      Rectangle rec = new Rectangle(this.curId, color_draw, 1, 2);
-      rec.putOnBoard(row, col, boards.get(player_num));
-      scan_i.close();
-      scan_j.close();
+      bdis.displaySingle(player_num);
     }
 
   }
   public void initialize() {
-    BoardDisplay bdis = new BoardDisplay();
-    bdis.display();
-    placeStash(PLAYER_A, BOARD_A, "Green", 2);
-    placeStash(PLAYER_A, BOARD_A, "Purple", 3);
-    placeStash(PLAYER_A, BOARD_A, "Red", 3);
-    placeStash(PLAYER_A, BOARD_A, "Blue", 2);
+    BoardDisplay bdis = new BoardDisplay(this.boards);
+    for (int player = PLAYER_A; player <= PLAYER_B; player++) {
+      bdis.displaySingle(player);
+      placeStash(player, "Green", 2, bdis);
+      placeStash(player, "Purple", 3, bdis);
+      placeStash(player, "Red", 3, bdis);
+      placeStash(player, "Blue", 2, bdis);
+    }
     //bdis.refresh(this.boards);
-    bdis.display();
   }
 
 }
