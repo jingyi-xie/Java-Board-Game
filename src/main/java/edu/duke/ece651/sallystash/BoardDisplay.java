@@ -6,17 +6,12 @@ import java.util.ArrayList;
 public class BoardDisplay {
   final int AS_SELF = 0;
   final int AS_OPP = 1;
+  final String player[] = {"Player A", "Player B"};
 
   private ArrayList<Board> boards;
   public BoardDisplay(ArrayList<Board> list) {
-    // this.board_a = new Board();
-    // this.board_b = new Board();
     this.boards = list;
   }
-  // public void refresh(ArrayList<Board> list) {
-  //   this.board_a = list.get(0);
-  //   this.board_b = list.get(1);
-  // }
 
   private void printTwoNum() {
     char[] col_index = {' ', ' ','0', '|', '1', '|', '2', '|', '3', '|', '4', '|', '5', '|', '6', '|', '7', '|', '8', '|', '9', ' ', ' '};
@@ -29,8 +24,41 @@ public class BoardDisplay {
     char[] col_index = {' ', ' ','0', '|', '1', '|', '2', '|', '3', '|', '4', '|', '5', '|', '6', '|', '7', '|', '8', '|', '9', ' ', ' '};
     System.out.println(col_index);
   }
+
+  public void displayWelcome(int player_num) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(player[player_num]);
+    sb.append(", you are going place Sally’s stash on the board. Make sure ");
+    sb.append(player[1 - player_num]);
+    sb.append(" isn’t \n");
+    sb.append("looking! For each stack, type the coordinate of the upper left side of the stash,\n");
+    sb.append("followed by either H (for horizontal) or V (for vertical). For example, M4H would \n");
+    sb.append("place a stack horizontally starting at M4 and going to the right. You have\n");
+    sb.append("2 Green stacks that are 1x2\n");
+    sb.append("3 Purple stacks that are 1x3\n");
+    sb.append("3 Red stacks that are 1x4\n");
+    sb.append("2 Blue stacks that are 1x6\n");
+    System.out.println(sb.toString());
+  }
+
+  public void displayInvalidFormat() {
+    System.out.println("=========================================================================");
+    System.out.println("                       Invalid input format, try again!                  ");
+    System.out.println("=========================================================================");
+  }
+
+  public void displayOutOfGrid() {
+    System.out.println("=========================================================================");
+    System.out.println("                     Location out of grid, try again!                    ");
+    System.out.println("=========================================================================");
+  }
+
+  public void displayCollide() {
+    System.out.println("=========================================================================");
+    System.out.println("                  Collide with another stack, try again!                 ");
+    System.out.println("=========================================================================");
+  }
   public void displaySingle(int player_num) {
-    System.out.println("-------------------------------------------------------------------------");
     printSingleNum();
     LineDisplay ld = new LineDisplay(boards.get(player_num));
     for (int i = 0; i < 20; i++) {
@@ -42,7 +70,6 @@ public class BoardDisplay {
   }
 
   public void displayTwo(int player_num) {
-    System.out.println("-------------------------------------------------------------------------");
     printTwoNum();
     LineDisplay ld_a = new LineDisplay(boards.get(player_num));
     LineDisplay ld_b = new LineDisplay(boards.get(1-player_num));

@@ -6,6 +6,10 @@ public class Game {
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
 
+  final int OCCUPIED = 0;
+  final int OUT_OF_GRID = 1;
+  final int SUCCESS = 2;
+
   private ArrayList<Board> boards;
 
   Board board_b;
@@ -44,13 +48,12 @@ public class Game {
     int i = 0;
     while (i < times) {
       Scanner scan = new Scanner(System.in);
-      System.out.println("-------------------------------------------------------------------------");
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
       System.out.println("-------------------------------------------------------------------------");
       String input = scan.next();
       Parser myParser = new Parser(input);
       i++;
-      if (myParser.isValid()) {
+      if (myParser.isValidFormat()) {
         int row = myParser.getRow();
         int col = myParser.getCol();
         Rectangle rec;
@@ -61,18 +64,18 @@ public class Game {
           rec = new Rectangle(this.curId, color_draw, length, height);
         }
         this.curId++;
-        boolean result = rec.putOnBoard(row, col, boards.get(player_num));
-        if (!result) {
-          System.out.println("=========================================================================");
-          System.out.println("                       Invalid location, try again!                      ");
-          System.out.println("=========================================================================");
+        int result = rec.putOnBoard(row, col, boards.get(player_num));
+        if (result == OCCUPIED) {
+          bdis.displayCollide();
+          i--;
+        }
+        else if (result == OUT_OF_GRID) {
+          bdis.displayOutOfGrid();
           i--;
         }
       }
       else {
-        System.out.println("=========================================================================");
-        System.out.println("                       Invalid input, try again!                         ");
-        System.out.println("=========================================================================");
+        bdis.displayInvalidFormat();
         i--;
       }
       bdis.displaySingle(player_num);
@@ -83,6 +86,7 @@ public class Game {
     BoardDisplay bdis = new BoardDisplay(this.boards);
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
+      bdis.displayWelcome(player);
       placeStash(player, "Green", 2, bdis);
       placeStash(player, "Purple", 3, bdis);
       placeStash(player, "Red", 3, bdis);

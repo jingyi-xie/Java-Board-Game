@@ -4,7 +4,7 @@ public class Parser {
     private int row;
     private int col;
     private boolean is_verticle;
-    private boolean is_valid;
+    private boolean is_validFormat;
 
     private int tryParseInt(String input) {
         try {
@@ -14,18 +14,18 @@ public class Parser {
         }
     }
     public Parser(String input) {
-        this.is_valid = (input.length() == 3);
+        this.is_validFormat = (input.length() == 3);
         this.row = (int) Character.toUpperCase(input.charAt(0)) - 65;
-        if (this.row < 0 || this.row > 19) {
-            this.is_valid = false;
-        }
+        // if (this.row < 0 || this.row > 19) {
+        //     this.is_validFormat = false;
+        // }
         this.col = tryParseInt(input);
         if (this.col == -1) {
-            this.is_valid = false;
+            this.is_validFormat = false;
         }
-        if (this.col < 0 || this.col > 9) {
-            this.is_valid = false;
-        }
+        // if (this.col < 0 || this.col > 9) {
+        //     this.is_validFormat = false;
+        // }
         char dir = input.charAt(2);
         if (dir == 'v' || dir == 'V') {
             this.is_verticle = true;
@@ -34,7 +34,7 @@ public class Parser {
             this.is_verticle = false;
         }
         else {
-            this.is_valid = false;
+            this.is_validFormat = false;
         }     
     }
     public int getRow() {
@@ -46,8 +46,8 @@ public class Parser {
     public boolean getDir() {
         return this.is_verticle;
     }
-    public boolean isValid() {
-        return this.is_valid;
+    public boolean isValidFormat() {
+        return this.is_validFormat;
     }
   }
 

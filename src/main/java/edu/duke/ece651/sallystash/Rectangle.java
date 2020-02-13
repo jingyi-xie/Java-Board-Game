@@ -14,19 +14,19 @@ public class Rectangle implements Shape {
   }
 
   @Override
-  public boolean putOnBoard(int x, int y, Board bd) {
+  public int putOnBoard(int x, int y, Board bd) {
     assert x >= 0 : "x should >= 0"; 
     assert x <= 19 : "x should <= 19"; 
     assert y >= 0 : "y should >= 0"; 
     assert y <= 9 : "y should <= 9"; 
-    if ((x + height > 19) || (y + length > 9)) {
-      return false;
+    if ((x < 0) || (x > 19) || (x + height > 19) || (y < 0) || (y > 9) || (y + length > 9)) {
+      return OUT_OF_GRID;
     }
     for (int i = x; i < x + this.height; i++) {
       for (int j = y; j < y + this.length; j++) {
           Cell curCell = bd.getCell(i, j);
           if (curCell.getIsPlaced()) {
-            return false;
+            return OCCUPIED;
           }
       }
     }
@@ -38,7 +38,7 @@ public class Rectangle implements Shape {
             curCell.setStashId(this.id);
         }
     }
-    return true;
+    return SUCCESS;
   }
 
 }
