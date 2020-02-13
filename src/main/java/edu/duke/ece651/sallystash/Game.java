@@ -51,7 +51,7 @@ public class Game {
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
       System.out.println("-------------------------------------------------------------------------");
       String input = scan.next();
-      Parser myParser = new Parser(input);
+      InitialParser myParser = new InitialParser(input);
       i++;
       if (myParser.isValidFormat()) {
         int row = myParser.getRow();
