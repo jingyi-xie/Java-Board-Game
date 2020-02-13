@@ -5,22 +5,30 @@ import java.util.Scanner;
 public class Game {
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
+  final int TOTAL_STACK = 37;
 
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;
   final int SUCCESS = 2;
 
   private ArrayList<Board> boards;
+  private ArrayList<Integer> remaining;
+  private Display bdis;
+  private boolean game_over;
 
-  Board board_b;
   int curId;
   public Game() {
     this.boards = new ArrayList<>();
     boards.add(new Board());
     boards.add(new Board());
+    this.bdis = new Display(this.boards);
+    this.remaining = new ArrayList<>();
+    remaining.add(TOTAL_STACK);
+    remaining.add(TOTAL_STACK);
+    this.game_over = false;
     this.curId = 1;
   }
-  public void placeStash(int player_num, String color, int times, BoardDisplay bdis) {
+  private void placeStash(int player_num, String color, int times, Display bdis) {
     String num[] = {"first", "second", "third"};
     String player[] = {"Player A", "Player B"};
     char color_draw;
@@ -80,10 +88,39 @@ public class Game {
       }
       bdis.displaySingle(player_num);
     }
+  }
 
+  private void oneDig(int player_num) {
+    boolean valid = false;
+    int row = -1;
+    int col = -1;
+    bdis.displayTwo(player_num);
+    while (!valid) {
+      Scanner scan = new Scanner(System.in);
+      bdis.displayWhere(player_num);
+      String input = scan.next();
+      DigParser myParser = new DigParser(input);
+      row = myParser.getRow();
+      col = myParser.getCol();
+      if ((row < 0) || (row > 19) || (col < 0) || (col > 9)) {
+        bdis.displayInvalidFormat();
+        continue;
+      }
+      valid = true;
+    }
+    if (boards.get(1 - player_num).tryDig(row, col)) {
+      remaining.set(1 - player_num, remaining.get(1 - player_num) - 1);
+      bdis.displayHit();
+    }
+    else {
+      bdis.displayMiss();
+    }
+    if (remaining.get(1 - player_num) == 0) {
+      bdis.displayWin(player_num);
+      this.game_over = true;
+    }
   }
   public void initialize() {
-    BoardDisplay bdis = new BoardDisplay(this.boards);
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
@@ -92,7 +129,13 @@ public class Game {
       placeStash(player, "Red", 3, bdis);
       placeStash(player, "Blue", 2, bdis);
     }
-    //bdis.refresh(this.boards);
   }
 
+  public void start() {
+    bdis.displayStart();
+    while (!this.game_over) {
+      oneDig(PLAYER_A);
+      oneDig(PLAYER_B);
+    }
+  }
 }

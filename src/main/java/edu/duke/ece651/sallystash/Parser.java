@@ -5,6 +5,13 @@ abstract class Parser {
     int col;
     boolean is_validFormat;
     
+    int tryParseInt(char input) {
+        try {
+          return Integer.parseInt(String.valueOf(input));
+        } catch (NumberFormatException e) {
+          return -1;
+        }
+    }
     int getRow() {
         return this.row;
     }

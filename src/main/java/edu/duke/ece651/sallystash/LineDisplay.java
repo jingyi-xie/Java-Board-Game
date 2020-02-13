@@ -16,12 +16,19 @@ public class LineDisplay {
         if (cur.getIsHit() == true && CASE == AS_SELF) {
           System.out.print('*');
         }
+        else if (CASE == AS_SELF) {
+          System.out.print(cur.getColor());
+        }
+        else if (cur.getIsHit() == true && CASE == AS_OPP){
+          System.out.print(cur.getColor());
+        }
         else if (cur.getIsMiss() == true && CASE == AS_OPP){
           System.out.print('X');
         }
-        else { //AS_SELF: not hit OR AS_OPPO: hit
-          System.out.print(cur.getColor());
+        else {
+          System.out.print(' ');
         }
+
         if (i == 9) {
           continue;
         }
@@ -29,5 +36,5 @@ public class LineDisplay {
       }
       System.out.print(" " + (char)letter);
     }
-}
+  }
 

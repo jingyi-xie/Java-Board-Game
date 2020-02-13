@@ -3,13 +3,13 @@ package edu.duke.ece651.sallystash;
 import java.util.ArrayList;
 
 
-public class BoardDisplay {
+public class Display {
   final int AS_SELF = 0;
   final int AS_OPP = 1;
   final String player[] = {"Player A", "Player B"};
 
   private ArrayList<Board> boards;
-  public BoardDisplay(ArrayList<Board> list) {
+  public Display(ArrayList<Board> list) {
     this.boards = list;
   }
 
@@ -41,6 +41,12 @@ public class BoardDisplay {
     System.out.println(sb.toString());
   }
 
+  public void displayStart() {
+    System.out.println("=========================================================================");
+    System.out.println("                               Game begins                               ");
+    System.out.println("=========================================================================");
+  }
+
   public void displayInvalidFormat() {
     System.out.println("=========================================================================");
     System.out.println("                       Invalid input format, try again!                  ");
@@ -58,6 +64,7 @@ public class BoardDisplay {
     System.out.println("                  Collide with another stack, try again!                 ");
     System.out.println("=========================================================================");
   }
+
   public void displaySingle(int player_num) {
     printSingleNum();
     LineDisplay ld = new LineDisplay(boards.get(player_num));
@@ -70,6 +77,10 @@ public class BoardDisplay {
   }
 
   public void displayTwo(int player_num) {
+    System.out.println(player[player_num] + "'s turn:");
+    System.out.print("      Your tree                ");
+    System.out.print("                      ");
+    System.out.print(player[1 - player_num] + "'s tree\n");
     printTwoNum();
     LineDisplay ld_a = new LineDisplay(boards.get(player_num));
     LineDisplay ld_b = new LineDisplay(boards.get(1-player_num));
@@ -82,4 +93,30 @@ public class BoardDisplay {
     printTwoNum();
     System.out.println("-------------------------------------------------------------------------");
   }
+
+  public void displayWhere(int player_num) {
+    System.out.println(player[player_num] + ", where do you want to hit " + player[1 - player_num] + "'s board?");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+  public void displayWin(int player_num) {
+    System.out.println("=========================================================================");
+    System.out.println("                              Game Over!                                 ");
+    System.out.println("                            " + player[player_num] + " wins!             ");
+    System.out.println("=========================================================================");
+  }
+
+  public void displayHit() {
+    System.out.println("=========================================================================");
+    System.out.println("                          You found a stack!                             ");
+    System.out.println("=========================================================================");
+  }
+
+  public void displayMiss() {
+    System.out.println("=========================================================================");
+    System.out.println("                              You missed!                                ");
+    System.out.println("=========================================================================");
+  }
+
+
+
 }

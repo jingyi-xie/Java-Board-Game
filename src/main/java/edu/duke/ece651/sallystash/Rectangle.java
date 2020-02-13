@@ -19,7 +19,7 @@ public class Rectangle implements Shape {
     assert x <= 19 : "x should <= 19"; 
     assert y >= 0 : "y should >= 0"; 
     assert y <= 9 : "y should <= 9"; 
-    if ((x < 0) || (x > 19) || (x + height > 19) || (y < 0) || (y > 9) || (y + length > 9)) {
+    if ((x < 0) || (x > 19) || (x + height > 20) || (y < 0) || (y > 9) || (y + length > 10)) {
       return OUT_OF_GRID;
     }
     for (int i = x; i < x + this.height; i++) {
