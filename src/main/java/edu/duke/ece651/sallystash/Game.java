@@ -34,22 +34,22 @@ public class Game {
     char color_draw;
     int length, height;
     if (color == "Green") {
-      color_draw = 'G';
+      color_draw = 'g';
       length = 2;
       height = 1;
     } 
     else if (color == "Purple") {
-      color_draw = 'P';
+      color_draw = 'p';
       length = 3;
       height = 1;
     }
     else if (color == "Red") {
-      color_draw = 'R';
+      color_draw = 'r';
       length = 4;
       height = 1;
     }
     else {
-      color_draw = 'B';
+      color_draw = 'b';
       length = 6;
       height = 1;
     }
@@ -57,7 +57,10 @@ public class Game {
     while (i < times) {
       Scanner scan = new Scanner(System.in);
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
-      System.out.println("-------------------------------------------------------------------------");
+      System.out.println("-------------------------------------------------------------------------"); 
+      if (!scan.hasNext()) {
+        return;
+      }
       String input = scan.next();
       InitialParser myParser = new InitialParser(input);
       i++;
@@ -98,6 +101,9 @@ public class Game {
     while (!valid) {
       Scanner scan = new Scanner(System.in);
       bdis.displayWhere(player_num);
+      if (!scan.hasNext()) {
+        return;
+      }
       String input = scan.next();
       DigParser myParser = new DigParser(input);
       row = myParser.getRow();

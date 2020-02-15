@@ -15,10 +15,6 @@ public class Rectangle implements Shape {
 
   @Override
   public int putOnBoard(int x, int y, Board bd) {
-    assert x >= 0 : "x should >= 0"; 
-    assert x <= 19 : "x should <= 19"; 
-    assert y >= 0 : "y should >= 0"; 
-    assert y <= 9 : "y should <= 9"; 
     if ((x < 0) || (x > 19) || (x + height > 20) || (y < 0) || (y > 9) || (y + length > 10)) {
       return OUT_OF_GRID;
     }
