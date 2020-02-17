@@ -39,20 +39,16 @@ public class Superstack implements Shape {
     }
     private boolean checkOccupied(int x, int y, Board bd) {
         if (this.orientation == UP) {
-            return occupiedHelper(x, y, bd) && occupiedHelper(x + 1, y - 1, bd) 
-            && occupiedHelper(x + 1, y, bd) && occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y - 1, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == DOWN) {
-            return occupiedHelper(x, y, bd) && occupiedHelper(x, y + 1, bd) 
-            && occupiedHelper(x, y + 2, bd) && occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x, y + 1, bd) || occupiedHelper(x, y + 2, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == RIGHT) {
-            return occupiedHelper(x, y, bd) && occupiedHelper(x + 1, y, bd) 
-            && occupiedHelper(x + 2, y, bd) && occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == LEFT) {
-            return occupiedHelper(x, y, bd) && occupiedHelper(x + 1, y, bd) 
-            && occupiedHelper(x + 2, y, bd) && occupiedHelper(x + 1, y - 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y - 1, bd);
         }
         return false;
     }

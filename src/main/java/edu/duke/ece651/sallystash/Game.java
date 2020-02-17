@@ -85,7 +85,7 @@ public class Game {
     return -1;
   }
   private void placeStash(int player_num, String color, int times, Display bdis) {
-    String num[] = {"first", "second", "third"};
+    String num[] = {"first", "second", "third", "forth", "fifth", "sixth", "seventh", "eighth", "ninth"};
     String player[] = {"Player A", "Player B"};
     int i = 0;
     while (i < times) {
@@ -170,7 +170,7 @@ public class Game {
       placeStash(player, "Green", 2, bdis);
       placeStash(player, "Purple", 3, bdis);
       placeStash(player, "Red", 3, bdis);
-      placeStash(player, "Blue", 2, bdis);
+      placeStash(player, "Blue", 3, bdis);
     }
   }
 
