@@ -37,7 +37,7 @@ public class Display {
     sb.append("2 Green stacks that are 1x2\n");
     sb.append("3 Purple stacks that are 1x3\n");
     sb.append("3 Red stacks that are 1x4\n");
-    sb.append("2 Blue stacks that are 1x6\n");
+    sb.append("3 Blue stacks that are 1x6\n");
     System.out.println(sb.toString());
   }
 
@@ -131,6 +131,16 @@ public class Display {
     System.out.println("S Sonar scan (" + sonar_remain + " remaining)");
     System.out.println();
     System.out.println(player[player_num] + ", what would you like to do?");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+
+  public void displayWhich(int player_num) {
+    System.out.println(player[player_num] + ", which stack do you want to move?");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+
+  public void displayWhereTo(int player_num) {
+    System.out.println(player[player_num] + ", where do you want to move the stack to?");
     System.out.println("-------------------------------------------------------------------------");
   }
 

@@ -192,9 +192,39 @@ public class Game {
     return true;
   }
 
+  private boolean oneMove(int player_num) {
+    bdis.displayTwo(player_num);
+    bdis.displayWhich(player_num);
+    if (!scan.hasNext()) {
+      return false;
+    }
+    String which = scan.next();
+    DigParser whichParser = new DigParser(which);
+    if (!whichParser.isValidFormat()) {
+      bdis.displayInvalidFormat();
+      return false;
+    }
+    int old_row = whichParser.getRow();
+    int old_col = whichParser.getCol();
+    bdis.displayWhereTo(player_num);
+    if (!scan.hasNext()) {
+      return false;
+    }
+    String where = scan.next();
+    InitialParser whereParser = new InitialParser(where);
+    if (!whereParser.isValidFormat()) {
+      bdis.displayInvalidFormat();
+      return false;
+    }
+    int new_row = whereParser.getRow();
+    int new_col = whereParser.getCol();
+    int new_dir = whereParser.getDir();
+
+    return true;
+  }
+
   private void oneTurn(int player_num) {
     boolean valid = false;
-    
     while (!valid) {
       // Scanner scan = new Scanner(System.in);
       bdis.displayTwo(player_num);
@@ -206,6 +236,12 @@ public class Game {
       if (input.equals("D") || input.equals("d")) {
         valid = oneDig(player_num);
       }
+      else if (input.equals("M") || input.equals("m")) {
+        valid = oneMove(player_num);
+      }
+      // else if (input.equals("S") || input.equals("s")) {
+      //   valid = oneSonar(player_num);
+      // }
     }
   }
 
