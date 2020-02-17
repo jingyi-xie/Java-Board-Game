@@ -117,6 +117,12 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  public void displayWrongDir() {
+    System.out.println("=========================================================================");
+    System.out.println("                 Orientation not compatible with the stack!              ");
+    System.out.println("=========================================================================");
+  }
+
 
 
 }

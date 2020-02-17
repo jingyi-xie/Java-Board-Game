@@ -10,6 +10,14 @@ public class Game {
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;
   final int SUCCESS = 2;
+  final int WRONG_DIR = 3;
+
+  final int HORIZONTAL = 0;
+  final int VERTICAL = 1;
+  final int UP = 2;
+  final int RIGHT = 3;
+  final int DOWN = 4;
+  final int LEFT = 5;
 
   private ArrayList<Board> boards;
   private ArrayList<Integer> remaining;
@@ -28,31 +36,57 @@ public class Game {
     this.game_over = false;
     this.curId = 1;
   }
-  private void placeStash(int player_num, String color, int times, Display bdis) {
-    String num[] = {"first", "second", "third"};
-    String player[] = {"Player A", "Player B"};
+
+  private int placeRectangle(InitialParser myParser, String color, int player_num) {
     char color_draw;
     int length, height;
+    int row = myParser.getRow();
+    int col = myParser.getCol();
     if (color == "Green") {
       color_draw = 'g';
       length = 2;
       height = 1;
     } 
-    else if (color == "Purple") {
+    else {
       color_draw = 'p';
       length = 3;
       height = 1;
     }
-    else if (color == "Red") {
-      color_draw = 'r';
-      length = 4;
-      height = 1;
+    Rectangle rec;
+    if (myParser.getDir() == VERTICAL) {
+      rec = new Rectangle(this.curId, color_draw, height, length);
+    }
+    else if (myParser.getDir() == HORIZONTAL){
+      rec = new Rectangle(this.curId, color_draw, length, height);
     }
     else {
-      color_draw = 'b';
-      length = 6;
-      height = 1;
+      return WRONG_DIR;
     }
+    this.curId++;
+    return rec.putOnBoard(row, col, boards.get(player_num));
+  }
+
+  private int placeSuper(InitialParser myParser, String color, int player_num) {
+    int row = myParser.getRow();
+    int col = myParser.getCol();
+    int dir = myParser.getDir();
+    Superstack sup;
+    if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
+      sup = new Superstack(this.curId, dir);
+    }
+    else {
+      return WRONG_DIR;
+    }
+    this.curId++;
+    return sup.putOnBoard(row, col, boards.get(player_num));
+  }
+
+  private int placeCrazy(InitialParser myParser, String color, int player_num) {
+    return -1;
+  }
+  private void placeStash(int player_num, String color, int times, Display bdis) {
+    String num[] = {"first", "second", "third"};
+    String player[] = {"Player A", "Player B"};
     int i = 0;
     while (i < times) {
       Scanner scan = new Scanner(System.in);
@@ -63,25 +97,28 @@ public class Game {
       }
       String input = scan.next();
       InitialParser myParser = new InitialParser(input);
+      int result;
       i++;
       if (myParser.isValidFormat()) {
-        int row = myParser.getRow();
-        int col = myParser.getCol();
-        Rectangle rec;
-        if (myParser.getDir()) {
-          rec = new Rectangle(this.curId, color_draw, height, length);
+        if (color == "Green" || color == "Purple") {
+          result = placeRectangle(myParser, color, player_num);
+        }
+        else if (color == "Red") {
+          result = placeSuper(myParser, color, player_num);
         }
         else {
-          rec = new Rectangle(this.curId, color_draw, length, height);
+          result = placeCrazy(myParser, color, player_num);
         }
-        this.curId++;
-        int result = rec.putOnBoard(row, col, boards.get(player_num));
         if (result == OCCUPIED) {
           bdis.displayCollide();
           i--;
         }
         else if (result == OUT_OF_GRID) {
           bdis.displayOutOfGrid();
+          i--;
+        }
+        else if (result == WRONG_DIR) {
+          bdis.displayWrongDir();
           i--;
         }
       }

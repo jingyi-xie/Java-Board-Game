@@ -1,7 +1,14 @@
 package edu.duke.ece651.sallystash;
 
 public class InitialParser extends Parser{
-    private boolean is_verticle;
+    final int HORIZONTAL = 0;
+    final int VERTICAL = 1;
+    final int UP = 2;
+    final int RIGHT = 3;
+    final int DOWN = 4;
+    final int LEFT = 5;
+
+    private int orientation;
     public InitialParser(String input) {
         this.is_validFormat = (input.length() == 3);
         if (this.is_validFormat) {
@@ -12,10 +19,22 @@ public class InitialParser extends Parser{
             }
             char dir = input.charAt(2);
             if (dir == 'v' || dir == 'V') {
-                this.is_verticle = true;
+                this.orientation = VERTICAL;
             }
             else if (dir == 'h' || dir == 'H') {
-                this.is_verticle = false;
+                this.orientation = HORIZONTAL;
+            }
+            else if (dir == 'u' || dir == 'U') {
+                this.orientation = UP;
+            }
+            else if (dir == 'd' || dir == 'D') {
+                this.orientation = DOWN;
+            }
+            else if (dir == 'l' || dir == 'L') {
+                this.orientation = LEFT;
+            }
+            else if (dir == 'r' || dir == 'R') {
+                this.orientation = RIGHT;
             }
             else {
                 this.is_validFormat = false;
@@ -23,8 +42,8 @@ public class InitialParser extends Parser{
         }
           
     }
-    public boolean getDir() {
-        return this.is_verticle;
+    public int getDir() {
+        return this.orientation;
     }
   }
 
