@@ -26,27 +26,31 @@ public class Game {
   private ArrayList<Integer> move_remaining;
   private ArrayList<Integer> sonar_remaining;
 
+  private Scanner scan;
+
   private Display bdis;
   private boolean game_over;
 
   int curId;
   public Game() {
     this.boards = new ArrayList<>();
-    boards.add(new Board());
-    boards.add(new Board());
+    this.boards.add(new Board());
+    this.boards.add(new Board());
     this.bdis = new Display(this.boards);
 
     this.stack_remaining = new ArrayList<>();
-    stack_remaining.add(TOTAL_STACK);
-    stack_remaining.add(TOTAL_STACK);
+    this.stack_remaining.add(TOTAL_STACK);
+    this.stack_remaining.add(TOTAL_STACK);
 
     this.move_remaining = new ArrayList<>();
-    move_remaining.add(SPECIAL_LIMIT);
-    move_remaining.add(SPECIAL_LIMIT);
+    this.move_remaining.add(SPECIAL_LIMIT);
+    this.move_remaining.add(SPECIAL_LIMIT);
 
     this.sonar_remaining = new ArrayList<>();
-    sonar_remaining.add(SPECIAL_LIMIT);
-    sonar_remaining.add(SPECIAL_LIMIT);
+    this.sonar_remaining.add(SPECIAL_LIMIT);
+    this.sonar_remaining.add(SPECIAL_LIMIT);
+
+    this.scan = new Scanner(System.in);
 
     this.game_over = false;
     this.curId = 1;
@@ -116,7 +120,7 @@ public class Game {
     String player[] = {"Player A", "Player B"};
     int i = 0;
     while (i < times) {
-      Scanner scan = new Scanner(System.in);
+      // Scanner scan = new Scanner(System.in);
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
       System.out.println("-------------------------------------------------------------------------"); 
       if (!scan.hasNext()) {
@@ -161,7 +165,7 @@ public class Game {
     int row = -1;
     int col = -1;
     bdis.displayTwo(player_num);
-    Scanner scan = new Scanner(System.in);
+    // Scanner scan = new Scanner(System.in);
     bdis.displayWhere(player_num);
     if (!scan.hasNext()) {
       return false;
@@ -192,7 +196,7 @@ public class Game {
     boolean valid = false;
     
     while (!valid) {
-      Scanner scan = new Scanner(System.in);
+      // Scanner scan = new Scanner(System.in);
       bdis.displayTwo(player_num);
       bdis.displayOptions(player_num, move_remaining.get(player_num), sonar_remaining.get(player_num));
       if (!scan.hasNext()) {
@@ -209,10 +213,10 @@ public class Game {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
-      placeStash(player, "Green", 1, bdis);
-      placeStash(player, "Purple", 1, bdis);
-      placeStash(player, "Red", 1, bdis);
-      placeStash(player, "Blue", 1, bdis);
+      placeStash(player, "Green", 2, bdis);
+      placeStash(player, "Purple", 3, bdis);
+      placeStash(player, "Red", 3, bdis);
+      placeStash(player, "Blue", 3, bdis);
     }
   }
 
