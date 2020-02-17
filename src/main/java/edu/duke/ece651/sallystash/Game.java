@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Game {
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
-  final int TOTAL_STACK = 37;
+  final int TOTAL_STACK = 43;
 
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;
@@ -82,8 +82,20 @@ public class Game {
   }
 
   private int placeCrazy(InitialParser myParser, String color, int player_num) {
-    return -1;
+    int row = myParser.getRow();
+    int col = myParser.getCol();
+    int dir = myParser.getDir();
+    Crazystack crazy;
+    if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
+      crazy = new Crazystack(this.curId, dir);
+    }
+    else {
+      return WRONG_DIR;
+    }
+    this.curId++;
+    return crazy.putOnBoard(row, col, boards.get(player_num));
   }
+
   private void placeStash(int player_num, String color, int times, Display bdis) {
     String num[] = {"first", "second", "third", "forth", "fifth", "sixth", "seventh", "eighth", "ninth"};
     String player[] = {"Player A", "Player B"};
