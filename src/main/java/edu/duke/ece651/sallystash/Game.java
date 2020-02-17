@@ -6,6 +6,8 @@ public class Game {
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
   final int TOTAL_STACK = 43;
+  final int SPECIAL_LIMIT = 3;
+
 
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;
@@ -20,7 +22,10 @@ public class Game {
   final int LEFT = 5;
 
   private ArrayList<Board> boards;
-  private ArrayList<Integer> remaining;
+  private ArrayList<Integer> stack_remaining;
+  private ArrayList<Integer> move_remaining;
+  private ArrayList<Integer> sonar_remaining;
+
   private Display bdis;
   private boolean game_over;
 
@@ -30,9 +35,19 @@ public class Game {
     boards.add(new Board());
     boards.add(new Board());
     this.bdis = new Display(this.boards);
-    this.remaining = new ArrayList<>();
-    remaining.add(TOTAL_STACK);
-    remaining.add(TOTAL_STACK);
+
+    this.stack_remaining = new ArrayList<>();
+    stack_remaining.add(TOTAL_STACK);
+    stack_remaining.add(TOTAL_STACK);
+
+    this.move_remaining = new ArrayList<>();
+    move_remaining.add(SPECIAL_LIMIT);
+    move_remaining.add(SPECIAL_LIMIT);
+
+    this.sonar_remaining = new ArrayList<>();
+    sonar_remaining.add(SPECIAL_LIMIT);
+    sonar_remaining.add(SPECIAL_LIMIT);
+
     this.game_over = false;
     this.curId = 1;
   }
@@ -142,55 +157,72 @@ public class Game {
     }
   }
 
-  private void oneDig(int player_num) {
-    boolean valid = false;
+  private boolean oneDig(int player_num) {
     int row = -1;
     int col = -1;
     bdis.displayTwo(player_num);
-    while (!valid) {
-      Scanner scan = new Scanner(System.in);
-      bdis.displayWhere(player_num);
-      if (!scan.hasNext()) {
-        return;
-      }
-      String input = scan.next();
-      DigParser myParser = new DigParser(input);
-      row = myParser.getRow();
-      col = myParser.getCol();
-      if ((row < 0) || (row > 19) || (col < 0) || (col > 9)) {
-        bdis.displayInvalidFormat();
-        continue;
-      }
-      valid = true;
+    Scanner scan = new Scanner(System.in);
+    bdis.displayWhere(player_num);
+    if (!scan.hasNext()) {
+      return false;
+    }
+    String input = scan.next();
+    DigParser myParser = new DigParser(input);
+    row = myParser.getRow();
+    col = myParser.getCol();
+    if ((row < 0) || (row > 19) || (col < 0) || (col > 9)) {
+      bdis.displayInvalidFormat();
+      return false;
     }
     if (boards.get(1 - player_num).tryDig(row, col)) {
-      remaining.set(1 - player_num, remaining.get(1 - player_num) - 1);
+      stack_remaining.set(1 - player_num, stack_remaining.get(1 - player_num) - 1);
       bdis.displayHit();
     }
     else {
       bdis.displayMiss();
     }
-    if (remaining.get(1 - player_num) == 0) {
+    if (stack_remaining.get(1 - player_num) == 0) {
       bdis.displayWin(player_num);
       this.game_over = true;
     }
+    return true;
   }
+
+  private void oneTurn(int player_num) {
+    boolean valid = false;
+    
+    while (!valid) {
+      Scanner scan = new Scanner(System.in);
+      bdis.displayTwo(player_num);
+      bdis.displayOptions(player_num, move_remaining.get(player_num), sonar_remaining.get(player_num));
+      if (!scan.hasNext()) {
+        return;
+      }
+      String input = scan.next();
+      if (input.equals("D") || input.equals("d")) {
+        valid = oneDig(player_num);
+      }
+    }
+  }
+
   public void initialize() {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
-      placeStash(player, "Green", 2, bdis);
-      placeStash(player, "Purple", 3, bdis);
-      placeStash(player, "Red", 3, bdis);
-      placeStash(player, "Blue", 3, bdis);
+      placeStash(player, "Green", 1, bdis);
+      placeStash(player, "Purple", 1, bdis);
+      placeStash(player, "Red", 1, bdis);
+      placeStash(player, "Blue", 1, bdis);
     }
   }
 
   public void start() {
     bdis.displayStart();
     while (!this.game_over) {
-      oneDig(PLAYER_A);
-      oneDig(PLAYER_B);
+      // oneDig(PLAYER_A);
+      // oneDig(PLAYER_B);
+      oneTurn(PLAYER_A);
+      oneTurn(PLAYER_B);
     }
   }
 }

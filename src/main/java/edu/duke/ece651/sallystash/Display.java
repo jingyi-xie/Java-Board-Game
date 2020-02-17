@@ -95,7 +95,7 @@ public class Display {
   }
 
   public void displayWhere(int player_num) {
-    System.out.println(player[player_num] + ", where do you want to hit " + player[1 - player_num] + "'s board?");
+    System.out.println(player[player_num] + ", where do you want to dig " + player[1 - player_num] + "'s board?");
     System.out.println("-------------------------------------------------------------------------");
   }
   public void displayWin(int player_num) {
@@ -121,6 +121,17 @@ public class Display {
     System.out.println("=========================================================================");
     System.out.println("                 Orientation not compatible with the stack!              ");
     System.out.println("=========================================================================");
+  }
+
+  public void displayOptions(int player_num, int move_remain, int sonar_remain) {
+    System.out.println("Possible actions for " + player[player_num]);
+    System.out.println();
+    System.out.println("D Dig in a square");
+    System.out.println("M Move a stack to another square (" + move_remain + " remaining)");
+    System.out.println("S Sonar scan (" + sonar_remain + " remaining)");
+    System.out.println();
+    System.out.println(player[player_num] + ", what would you like to do?");
+    System.out.println("-------------------------------------------------------------------------");
   }
 
 
