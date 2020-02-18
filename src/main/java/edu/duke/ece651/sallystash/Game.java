@@ -5,7 +5,9 @@ import java.util.Scanner;
 public class Game {
   final int PLAYER_A = 0;
   final int PLAYER_B = 1;
-  final int TOTAL_STACK = 43;
+  final int TOTAL_CELL = 43;
+  final int TOTAL_STACK = 11;
+
   final int SPECIAL_LIMIT = 3;
 
   final int OCCUPIED = 0;
@@ -39,8 +41,8 @@ public class Game {
     this.bdis = new Display(this.boards);
 
     this.stack_remaining = new ArrayList<>();
-    this.stack_remaining.add(TOTAL_STACK);
-    this.stack_remaining.add(TOTAL_STACK);
+    this.stack_remaining.add(TOTAL_CELL);
+    this.stack_remaining.add(TOTAL_CELL);
 
     this.move_remaining = new ArrayList<>();
     this.move_remaining.add(SPECIAL_LIMIT);
@@ -53,14 +55,12 @@ public class Game {
     this.scan = new Scanner(System.in);
 
     this.game_over = false;
-    this.curId = 1;
+    this.curId = -1;
   }
 
   private int placeRectangle(int row, int col, int dir, int old_id, String color, int player_num) {
     char color_draw;
     int length, height;
-    // int row = myParser.getRow();
-    // int col = myParser.getCol();
     if (color == "Green") {
       color_draw = 'g';
       length = 2;
@@ -73,45 +73,36 @@ public class Game {
     }
     Rectangle rec;
     if (dir == VERTICAL) {
-      rec = new Rectangle(old_id + 1, color_draw, height, length);
+      rec = new Rectangle((old_id + 1) % TOTAL_STACK, color_draw, height, length);
     }
     else if (dir == HORIZONTAL){
-      rec = new Rectangle(old_id + 1, color_draw, length, height);
+      rec = new Rectangle((old_id + 1) % TOTAL_STACK, color_draw, length, height);
     }
     else {
       return WRONG_DIR;
     }
-    // this.curId++;
     return rec.putOnBoard(row, col, boards.get(player_num));
   }
 
   private int placeSuper(int row, int col, int dir, int old_id, String color, int player_num) {
-    // int row = myParser.getRow();
-    // int col = myParser.getCol();
-    // int dir = myParser.getDir();
     Superstack sup;
     if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
-      sup = new Superstack(old_id + 1, dir);
+      sup = new Superstack((old_id + 1) % TOTAL_STACK, dir);
     }
     else {
       return WRONG_DIR;
     }
-    // this.curId++;
     return sup.putOnBoard(row, col, boards.get(player_num));
   }
 
   private int placeCrazy(int row, int col, int dir, int old_id, String color, int player_num) {
-    // int row = myParser.getRow();
-    // int col = myParser.getCol();
-    // int dir = myParser.getDir();
     Crazystack crazy;
     if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
-      crazy = new Crazystack(old_id + 1, dir);
+      crazy = new Crazystack((old_id + 1) % TOTAL_STACK, dir);
     }
     else {
       return WRONG_DIR;
     }
-    // this.curId++;
     return crazy.putOnBoard(row, col, boards.get(player_num));
   }
 
@@ -120,7 +111,6 @@ public class Game {
     String player[] = {"Player A", "Player B"};
     int i = 0;
     while (i < times) {
-      // Scanner scan = new Scanner(System.in);
       System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
       System.out.println("-------------------------------------------------------------------------"); 
       if (!scan.hasNext()) {
@@ -156,6 +146,7 @@ public class Game {
           i--;
         }
         else if (result == SUCCESS) {
+          bdis.displaySingle(player_num);
           this.curId++;
         }
       }
@@ -163,7 +154,6 @@ public class Game {
         bdis.displayInvalidFormat();
         i--;
       }
-      bdis.displaySingle(player_num);
     }
   }
 
@@ -171,7 +161,6 @@ public class Game {
     int row = -1;
     int col = -1;
     bdis.displayTwo(player_num);
-    // Scanner scan = new Scanner(System.in);
     bdis.displayWhere(player_num);
     if (!scan.hasNext()) {
       return false;
@@ -199,6 +188,9 @@ public class Game {
   }
 
   private boolean oneMove(int player_num) {
+    if (move_remaining.get(player_num) == 0) {
+      return false;
+    }
     bdis.displayTwo(player_num);
     bdis.displayWhich(player_num);
     if (!scan.hasNext()) {
@@ -206,12 +198,12 @@ public class Game {
     }
     String which = scan.next();
     DigParser whichParser = new DigParser(which);
-    if (!whichParser.isValidFormat()) {
-      bdis.displayInvalidFormat();
-      return false;
-    }
     int old_row = whichParser.getRow();
     int old_col = whichParser.getCol();
+    if (!whichParser.isValidFormat() || !boards.get(player_num).getCell(old_row, old_col).getIsPlaced()) {
+      bdis.displayInvalidMove();
+      return false;
+    }
     bdis.displayWhereTo(player_num);
     if (!scan.hasNext()) {
       return false;
@@ -252,13 +244,14 @@ public class Game {
       }
     }
     //remove(old_row, old_col, boards.get(player_num));
+    bdis.displayTwo(player_num);
+    move_remaining.set(player_num, move_remaining.get(player_num) - 1);
     return true;
   }
 
   private void oneTurn(int player_num) {
     boolean valid = false;
     while (!valid) {
-      // Scanner scan = new Scanner(System.in);
       bdis.displayTwo(player_num);
       bdis.displayOptions(player_num, move_remaining.get(player_num), sonar_remaining.get(player_num));
       if (!scan.hasNext()) {
@@ -281,10 +274,10 @@ public class Game {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
-      placeStash(player, "Green", 1, bdis);
-      placeStash(player, "Purple", 1, bdis);
-      placeStash(player, "Red", 1, bdis);
-      placeStash(player, "Blue", 1, bdis);
+      placeStash(player, "Green", 2, bdis);
+      placeStash(player, "Purple", 3, bdis);
+      placeStash(player, "Red", 3, bdis);
+      placeStash(player, "Blue", 3, bdis);
     }
   }
 
