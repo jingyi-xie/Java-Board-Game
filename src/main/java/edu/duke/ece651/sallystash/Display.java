@@ -144,6 +144,12 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  public void displayInvalidMove() {
+    System.out.println("=========================================================================");
+    System.out.println("                              Invalid move!                              ");
+    System.out.println("=========================================================================");
+  }
+
 
 
 }

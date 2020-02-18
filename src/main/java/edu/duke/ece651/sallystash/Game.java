@@ -8,7 +8,6 @@ public class Game {
   final int TOTAL_STACK = 43;
   final int SPECIAL_LIMIT = 3;
 
-
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;
   final int SUCCESS = 2;
@@ -31,7 +30,8 @@ public class Game {
   private Display bdis;
   private boolean game_over;
 
-  int curId;
+  private int curId;
+
   public Game() {
     this.boards = new ArrayList<>();
     this.boards.add(new Board());
@@ -56,11 +56,11 @@ public class Game {
     this.curId = 1;
   }
 
-  private int placeRectangle(InitialParser myParser, String color, int player_num) {
+  private int placeRectangle(int row, int col, int dir, int old_id, String color, int player_num) {
     char color_draw;
     int length, height;
-    int row = myParser.getRow();
-    int col = myParser.getCol();
+    // int row = myParser.getRow();
+    // int col = myParser.getCol();
     if (color == "Green") {
       color_draw = 'g';
       length = 2;
@@ -72,46 +72,46 @@ public class Game {
       height = 1;
     }
     Rectangle rec;
-    if (myParser.getDir() == VERTICAL) {
-      rec = new Rectangle(this.curId, color_draw, height, length);
+    if (dir == VERTICAL) {
+      rec = new Rectangle(old_id + 1, color_draw, height, length);
     }
-    else if (myParser.getDir() == HORIZONTAL){
-      rec = new Rectangle(this.curId, color_draw, length, height);
+    else if (dir == HORIZONTAL){
+      rec = new Rectangle(old_id + 1, color_draw, length, height);
     }
     else {
       return WRONG_DIR;
     }
-    this.curId++;
+    // this.curId++;
     return rec.putOnBoard(row, col, boards.get(player_num));
   }
 
-  private int placeSuper(InitialParser myParser, String color, int player_num) {
-    int row = myParser.getRow();
-    int col = myParser.getCol();
-    int dir = myParser.getDir();
+  private int placeSuper(int row, int col, int dir, int old_id, String color, int player_num) {
+    // int row = myParser.getRow();
+    // int col = myParser.getCol();
+    // int dir = myParser.getDir();
     Superstack sup;
     if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
-      sup = new Superstack(this.curId, dir);
+      sup = new Superstack(old_id + 1, dir);
     }
     else {
       return WRONG_DIR;
     }
-    this.curId++;
+    // this.curId++;
     return sup.putOnBoard(row, col, boards.get(player_num));
   }
 
-  private int placeCrazy(InitialParser myParser, String color, int player_num) {
-    int row = myParser.getRow();
-    int col = myParser.getCol();
-    int dir = myParser.getDir();
+  private int placeCrazy(int row, int col, int dir, int old_id, String color, int player_num) {
+    // int row = myParser.getRow();
+    // int col = myParser.getCol();
+    // int dir = myParser.getDir();
     Crazystack crazy;
     if (dir == UP || dir == DOWN || dir == RIGHT || dir == LEFT) {
-      crazy = new Crazystack(this.curId, dir);
+      crazy = new Crazystack(old_id + 1, dir);
     }
     else {
       return WRONG_DIR;
     }
-    this.curId++;
+    // this.curId++;
     return crazy.putOnBoard(row, col, boards.get(player_num));
   }
 
@@ -128,17 +128,20 @@ public class Game {
       }
       String input = scan.next();
       InitialParser myParser = new InitialParser(input);
+      int row = myParser.getRow();
+      int col = myParser.getCol();
+      int dir = myParser.getDir();
       int result;
       i++;
       if (myParser.isValidFormat()) {
         if (color == "Green" || color == "Purple") {
-          result = placeRectangle(myParser, color, player_num);
+          result = placeRectangle(row, col, dir, this.curId, color, player_num);
         }
         else if (color == "Red") {
-          result = placeSuper(myParser, color, player_num);
+          result = placeSuper(row, col, dir, this.curId, color, player_num);
         }
         else {
-          result = placeCrazy(myParser, color, player_num);
+          result = placeCrazy(row, col, dir, this.curId, color, player_num);
         }
         if (result == OCCUPIED) {
           bdis.displayCollide();
@@ -151,6 +154,9 @@ public class Game {
         else if (result == WRONG_DIR) {
           bdis.displayWrongDir();
           i--;
+        }
+        else if (result == SUCCESS) {
+          this.curId++;
         }
       }
       else {
@@ -219,7 +225,33 @@ public class Game {
     int new_row = whereParser.getRow();
     int new_col = whereParser.getCol();
     int new_dir = whereParser.getDir();
-
+    int old_id = boards.get(player_num).getCell(old_row, old_col).getStashId();
+    
+    if (old_id <= 2) {
+      if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Green", player_num) != SUCCESS) {
+        bdis.displayInvalidMove();
+        return false;
+      }
+    }
+    else if (old_id <= 5) {
+      if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Purple", player_num) != SUCCESS) {
+        bdis.displayInvalidMove();
+        return false;
+      }
+    }
+    else if (old_id <= 8) {
+      if (placeSuper(new_row, new_col, new_dir, old_id - 1, "Red", player_num) != SUCCESS) {
+        bdis.displayInvalidMove();
+        return false;
+      }
+    }
+    else {
+      if (placeCrazy(new_row, new_col, new_dir, old_id - 1, "Blue", player_num) != SUCCESS) {
+        bdis.displayInvalidMove();
+        return false;
+      }
+    }
+    //remove(old_row, old_col, boards.get(player_num));
     return true;
   }
 
@@ -249,10 +281,10 @@ public class Game {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
-      placeStash(player, "Green", 2, bdis);
-      placeStash(player, "Purple", 3, bdis);
-      placeStash(player, "Red", 3, bdis);
-      placeStash(player, "Blue", 3, bdis);
+      placeStash(player, "Green", 1, bdis);
+      placeStash(player, "Purple", 1, bdis);
+      placeStash(player, "Red", 1, bdis);
+      placeStash(player, "Blue", 1, bdis);
     }
   }
 
