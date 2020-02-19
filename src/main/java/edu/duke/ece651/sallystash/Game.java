@@ -205,6 +205,17 @@ public class Game {
     return res;
   }
 
+  private void moveHit(int row, int col, ArrayList<Integer> list, int id, Board bd) {
+    for (int i = Math.max(row - 4, 0); i < Math.min(row + 5, 19); i++) {
+      for (int j = Math.max(col - 4, 0); j < Math.min(col + 5, 9); j++) {
+        if (bd.getCell(i, j).getStashId() == id && list.contains(bd.getCell(i, j).getOrder())) {
+          bd.getCell(i, j).setIsHit();
+          //add show to opponent
+        }
+      }
+    }
+  }
+
   private boolean oneMove(int player_num) {
     if (move_remaining.get(player_num) == 0) {
       return false;
@@ -262,6 +273,7 @@ public class Game {
       }
     }
     ArrayList<Integer> hitList = remove(old_row, old_col, boards.get(player_num));
+    moveHit(new_row, new_col, hitList, old_id, boards.get(player_num));
     bdis.displayTwo(player_num);
     move_remaining.set(player_num, move_remaining.get(player_num) - 1);
     return true;
