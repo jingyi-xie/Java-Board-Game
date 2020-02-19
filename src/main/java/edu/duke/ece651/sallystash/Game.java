@@ -279,6 +279,57 @@ public class Game {
     return true;
   }
 
+  private ArrayList<Integer> sonarHelper(int row, int col, Board bd) {
+    ArrayList<Integer> list = new ArrayList<>(4);
+    list.add(0);
+    list.add(0);
+    list.add(0);
+    list.add(0);
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 10; j++) {
+        if (Math.abs((i - row)) * 6 + Math.abs((j - col)) * 6 <= 18) {
+          Cell curCell = bd.getCell(i, j);
+          if (curCell.getColor() == 'g') {
+            list.set(0, list.get(0) + 1);
+          }
+          else if (curCell.getColor() == 'p') {
+            list.set(1, list.get(1) + 1);
+          }
+          else if (curCell.getColor() == 'r') {
+            list.set(2, list.get(2) + 1);
+          }
+          else if (curCell.getColor() == 'b') {
+            list.set(3, list.get(3) + 1);
+          } 
+        }
+      }
+    }
+    return list;
+  }
+
+  private boolean oneSonar(int player_num) {
+    if (sonar_remaining.get(player_num) == 0) {
+      return false;
+    }
+    bdis.displayTwo(player_num);
+    bdis.displaySonar(player_num);
+    if (!scan.hasNext()) {
+      return false;
+    }
+    String where = scan.next();
+    DigParser whichParser = new DigParser(where);
+    int row = whichParser.getRow();
+    int col = whichParser.getCol();
+    if (!whichParser.isValidFormat()) {
+      bdis.displayInvalidFormat();
+      return false;
+    }
+    ArrayList<Integer> list = sonarHelper(row, col, boards.get(1 - player_num));
+    bdis.displaySonarResult(list);
+    sonar_remaining.set(player_num, sonar_remaining.get(player_num) - 1);
+    return true;
+  }
+
   private void oneTurn(int player_num) {
     boolean valid = false;
     while (!valid) {
@@ -294,9 +345,9 @@ public class Game {
       else if (input.equals("M") || input.equals("m")) {
         valid = oneMove(player_num);
       }
-      // else if (input.equals("S") || input.equals("s")) {
-      //   valid = oneSonar(player_num);
-      // }
+      else if (input.equals("S") || input.equals("s")) {
+        valid = oneSonar(player_num);
+      }
     }
   }
 

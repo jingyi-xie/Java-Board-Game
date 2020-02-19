@@ -150,6 +150,21 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  public void displaySonar(int player_num) {
+    System.out.println(player[player_num] + ", please choose the center coordinate of the sonar scan.");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+
+  public void displaySonarResult(ArrayList<Integer> list) {
+    System.out.println("Green stacks occupy " + list.get(0) + " squares");
+    System.out.println("Purple stacks occupy " + list.get(1) + " squares");
+    System.out.println("Red stacks occupy " + list.get(2) + " squares");
+    System.out.println("Blue stacks occupy " + list.get(3) + " squares");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+
+
+
 
 
 }
