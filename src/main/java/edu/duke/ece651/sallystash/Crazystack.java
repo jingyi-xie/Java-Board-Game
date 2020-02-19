@@ -61,10 +61,11 @@ public class Crazystack implements Shape {
         return false;
     }
 
-    private void placeHelper(int x, int y, Board bd) {
+    private void placeHelper(int x, int y, Board bd, int order) {
         Cell curCell = bd.getCell(x, y);
         curCell.setIsPlaced();
         curCell.setColor(this.color);;
+        curCell.setOrder(order);
         curCell.setStashId(this.id);
     }
 
@@ -77,36 +78,36 @@ public class Crazystack implements Shape {
             return OCCUPIED;
         }
         if (this.orientation == UP) {
-            placeHelper(x, y, bd);
-            placeHelper(x + 1, y, bd);
-            placeHelper(x + 2, y, bd);
-            placeHelper(x + 2, y + 1, bd);
-            placeHelper(x + 3, y + 1, bd);
-            placeHelper(x + 4, y + 1, bd);
+            placeHelper(x, y, bd, 1);
+            placeHelper(x + 1, y, bd, 2);
+            placeHelper(x + 2, y, bd, 3);
+            placeHelper(x + 2, y + 1, bd, 4);
+            placeHelper(x + 3, y + 1, bd, 5);
+            placeHelper(x + 4, y + 1, bd, 6);
         }
         else if (this.orientation == DOWN) {
-            placeHelper(x, y, bd);
-            placeHelper(x + 1, y, bd);
-            placeHelper(x + 2, y, bd);
-            placeHelper(x + 2, y - 1, bd);
-            placeHelper(x + 3, y - 1, bd);
-            placeHelper(x + 4, y - 1, bd);
+            placeHelper(x + 4, y - 1, bd, 1);
+            placeHelper(x + 3, y - 1, bd, 2);
+            placeHelper(x + 2, y - 1, bd, 3);
+            placeHelper(x + 2, y, bd, 4);
+            placeHelper(x + 1, y, bd, 5);
+            placeHelper(x, y, bd, 6);
         }
         else if (this.orientation == RIGHT) {
-            placeHelper(x, y, bd);
-            placeHelper(x, y + 1, bd);
-            placeHelper(x, y + 2, bd);
-            placeHelper(x - 1, y + 2, bd);
-            placeHelper(x - 1, y + 3, bd);
-            placeHelper(x - 1, y + 4, bd);
+            placeHelper(x, y, bd, 1);
+            placeHelper(x, y + 1, bd, 2);
+            placeHelper(x, y + 2, bd, 3);
+            placeHelper(x - 1, y + 2, bd, 4);
+            placeHelper(x - 1, y + 3, bd, 5);
+            placeHelper(x - 1, y + 4, bd, 6);
         }
         else if (this.orientation == LEFT) {
-            placeHelper(x, y, bd);
-            placeHelper(x, y + 1, bd);
-            placeHelper(x, y + 2, bd);
-            placeHelper(x + 1, y + 2, bd);
-            placeHelper(x + 1, y + 3, bd);
-            placeHelper(x + 1, y + 4, bd);
+            placeHelper(x + 1, y + 4, bd, 1);
+            placeHelper(x + 1, y + 3, bd, 2);
+            placeHelper(x + 1, y + 2, bd, 3);
+            placeHelper(x, y + 2, bd, 4);
+            placeHelper(x, y + 1, bd, 5);
+            placeHelper(x, y, bd, 6);
         }
         return SUCCESS;
     }

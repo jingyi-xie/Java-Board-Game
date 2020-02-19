@@ -39,24 +39,29 @@ public class Superstack implements Shape {
     }
     private boolean checkOccupied(int x, int y, Board bd) {
         if (this.orientation == UP) {
-            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y - 1, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y - 1, bd) || 
+            occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == DOWN) {
-            return occupiedHelper(x, y, bd) || occupiedHelper(x, y + 1, bd) || occupiedHelper(x, y + 2, bd) || occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x, y + 1, bd) || 
+            occupiedHelper(x, y + 2, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == RIGHT) {
-            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y + 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || 
+            occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
         else if (this.orientation == LEFT) {
-            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y - 1, bd);
+            return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || 
+            occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y - 1, bd);
         }
         return false;
     }
 
-    private void placeHelper(int x, int y, Board bd) {
+    private void placeHelper(int x, int y, Board bd, int order) {
         Cell curCell = bd.getCell(x, y);
         curCell.setIsPlaced();
-        curCell.setColor(this.color);;
+        curCell.setColor(this.color);
+        curCell.setOrder(order);
         curCell.setStashId(this.id);
     }
 
@@ -69,28 +74,28 @@ public class Superstack implements Shape {
             return OCCUPIED;
         }
         if (this.orientation == UP) {
-            placeHelper(x, y, bd);
-            placeHelper(x + 1, y - 1, bd); 
-            placeHelper(x + 1, y, bd);
-            placeHelper(x + 1, y + 1, bd);
+            placeHelper(x, y, bd, 1);
+            placeHelper(x + 1, y - 1, bd, 2); 
+            placeHelper(x + 1, y, bd, 3);
+            placeHelper(x + 1, y + 1, bd, 4);
         }
         else if (this.orientation == DOWN) {
-            placeHelper(x, y, bd);
-            placeHelper(x, y + 1, bd);
-            placeHelper(x, y + 2, bd);
-            placeHelper(x + 1, y + 1, bd);
+            placeHelper(x + 1, y + 1, bd, 1);
+            placeHelper(x, y + 2, bd, 2);
+            placeHelper(x, y + 1, bd, 3);
+            placeHelper(x, y, bd, 4);
         }
         else if (this.orientation == RIGHT) {
-            placeHelper(x, y, bd);
-            placeHelper(x + 1, y, bd);
-            placeHelper(x + 2, y, bd);
-            placeHelper(x + 1, y + 1, bd);
+            placeHelper(x + 1, y + 1, bd, 1);
+            placeHelper(x, y, bd, 2);
+            placeHelper(x + 1, y, bd, 3);
+            placeHelper(x + 2, y, bd, 4);
         }
         else if (this.orientation == LEFT) {
-            placeHelper(x, y, bd);
-            placeHelper(x + 1, y, bd);
-            placeHelper(x + 2, y, bd);
-            placeHelper(x + 1, y - 1, bd);
+            placeHelper(x + 1, y - 1, bd, 1);
+            placeHelper(x + 2, y, bd, 2);
+            placeHelper(x + 1, y, bd, 3);
+            placeHelper(x, y, bd, 4);
         }
         return SUCCESS;
     }

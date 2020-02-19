@@ -26,9 +26,12 @@ public class Rectangle implements Shape {
           }
       }
     }
+    int curOrder = 1;
     for (int i = x; i < x + this.height; i++) {
         for (int j = y; j < y + this.length; j++) {
             Cell curCell = bd.getCell(i, j);
+            curCell.setOrder(curOrder);
+            curOrder++;
             curCell.setIsPlaced();
             curCell.setColor(this.color);
             curCell.setStashId(this.id);

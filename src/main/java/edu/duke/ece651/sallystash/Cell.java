@@ -6,6 +6,7 @@ public class Cell {
   private boolean isHit;
   private boolean isMiss;
   private int stashId;
+  private int order;
 
   public Cell() {
     this.color = ' ';
@@ -13,6 +14,7 @@ public class Cell {
     this.isHit = false;
     this.isMiss = false;
     this.stashId = -1;
+    this.order = -1;
   }
   public void setColor(char c) {
     this.color = c;
@@ -44,4 +46,19 @@ public class Cell {
   public int getStashId() {
     return this.stashId;
   }
+  public void setOrder(int order) {
+    this.order = order;
+  }
+  public int getOrder() {
+    return this.order;
+  }
+  public void remove() {
+    this.color = ' ';
+    this.isPlaced = false;
+    this.isHit = false;
+    this.isMiss = false;
+    this.stashId = -1;
+    this.order = -1;
+  }
+
 }

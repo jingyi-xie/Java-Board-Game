@@ -187,6 +187,24 @@ public class Game {
     return true;
   }
 
+  private ArrayList<Integer> remove(int row, int col, Board bd) {
+    int removeId = bd.getCell(row, col).getStashId();
+    ArrayList<Integer> res = new ArrayList<>();
+    for (int i = Math.max(row - 4, 0); i < Math.min(row + 5, 19); i++) {
+      for (int j = Math.max(col - 4, 0); j < Math.min(col + 5, 9); j++) {
+        if (bd.getCell(i, j).getStashId() == removeId && bd.getCell(i, j).getIsPlaced()) {
+          Cell curCell = bd.getCell(i, j);
+          if (curCell.getIsHit()) {
+            res.add(curCell.getOrder());
+          }
+          curCell.remove();
+          //To-do: add was_hit, was_remove
+        }
+      }
+    }
+    return res;
+  }
+
   private boolean oneMove(int player_num) {
     if (move_remaining.get(player_num) == 0) {
       return false;
@@ -219,19 +237,19 @@ public class Game {
     int new_dir = whereParser.getDir();
     int old_id = boards.get(player_num).getCell(old_row, old_col).getStashId();
     
-    if (old_id <= 2) {
+    if (old_id <= 1) {
       if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Green", player_num) != SUCCESS) {
         bdis.displayInvalidMove();
         return false;
       }
     }
-    else if (old_id <= 5) {
+    else if (old_id <= 4) {
       if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Purple", player_num) != SUCCESS) {
         bdis.displayInvalidMove();
         return false;
       }
     }
-    else if (old_id <= 8) {
+    else if (old_id <= 7) {
       if (placeSuper(new_row, new_col, new_dir, old_id - 1, "Red", player_num) != SUCCESS) {
         bdis.displayInvalidMove();
         return false;
@@ -243,7 +261,7 @@ public class Game {
         return false;
       }
     }
-    //remove(old_row, old_col, boards.get(player_num));
+    ArrayList<Integer> hitList = remove(old_row, old_col, boards.get(player_num));
     bdis.displayTwo(player_num);
     move_remaining.set(player_num, move_remaining.get(player_num) - 1);
     return true;
