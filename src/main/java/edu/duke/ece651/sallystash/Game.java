@@ -26,8 +26,10 @@ public class Game {
   private ArrayList<Integer> stack_remaining;
   private ArrayList<Integer> move_remaining;
   private ArrayList<Integer> sonar_remaining;
+  private ArrayList<Boolean> isComputer;
 
   private Scanner scan;
+  private RandomGenerator rg;
 
   private Display bdis;
   private boolean game_over;
@@ -52,7 +54,12 @@ public class Game {
     this.sonar_remaining.add(SPECIAL_LIMIT);
     this.sonar_remaining.add(SPECIAL_LIMIT);
 
+    this.isComputer = new ArrayList<>();
+    this.isComputer.add(false);
+    this.isComputer.add(false);
+
     this.scan = new Scanner(System.in);
+    this.rg = new RandomGenerator();
 
     this.game_over = false;
     this.curId = -1;
@@ -111,12 +118,14 @@ public class Game {
     String player[] = {"Player A", "Player B"};
     int i = 0;
     while (i < times) {
-      System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
-      System.out.println("-------------------------------------------------------------------------"); 
-      if (!scan.hasNext()) {
-        return;
-      }
-      String input = scan.next();
+      if (!isComputer.get(player_num)) {
+        System.out.println(player[player_num] + ", where do you want to place the " + num[i] + " " + color + " stash?");
+        System.out.println("-------------------------------------------------------------------------"); 
+        if (!scan.hasNext()) {
+          return;
+        }
+      }  
+      String input = isComputer.get(player_num) ? rg.generatePlace() : scan.next();
       InitialParser myParser = new InitialParser(input);
       int row = myParser.getRow();
       int col = myParser.getCol();
@@ -134,24 +143,24 @@ public class Game {
           result = placeCrazy(row, col, dir, this.curId, color, player_num);
         }
         if (result == OCCUPIED) {
-          bdis.displayCollide();
+          bdis.displayCollide(isComputer.get(player_num));
           i--;
         }
         else if (result == OUT_OF_GRID) {
-          bdis.displayOutOfGrid();
+          bdis.displayOutOfGrid(isComputer.get(player_num));
           i--;
         }
         else if (result == WRONG_DIR) {
-          bdis.displayWrongDir();
+          bdis.displayWrongDir(isComputer.get(player_num));
           i--;
         }
         else if (result == SUCCESS) {
-          bdis.displaySingle(player_num);
+          bdis.displaySingle(player_num, isComputer.get(player_num));
           this.curId++;
         }
       }
       else {
-        bdis.displayInvalidFormat();
+        bdis.displayInvalidFormat(isComputer.get(player_num));
         i--;
       }
     }
@@ -160,29 +169,30 @@ public class Game {
   private boolean oneDig(int player_num) {
     int row = -1;
     int col = -1;
-    bdis.displayTwo(player_num);
-    bdis.displayWhere(player_num);
-    if (!scan.hasNext()) {
+    bdis.displayTwo(player_num, isComputer.get(player_num));
+    bdis.displayWhere(player_num, isComputer.get(player_num));
+    if (!isComputer.get(player_num) && !scan.hasNext()) {
       return false;
     }
-    String input = scan.next();
+    String input = isComputer.get(player_num) ? rg.generateChoose() : scan.next();
     DigParser myParser = new DigParser(input);
     row = myParser.getRow();
     col = myParser.getCol();
     if ((row < 0) || (row > 19) || (col < 0) || (col > 9)) {
-      bdis.displayInvalidFormat();
+      bdis.displayInvalidFormat(isComputer.get(player_num));
       return false;
     }
     if (boards.get(1 - player_num).tryDig(row, col)) {
       stack_remaining.set(1 - player_num, stack_remaining.get(1 - player_num) - 1);
-      bdis.displayHit();
+      bdis.displayHit(isComputer.get(player_num), player_num);
     }
     else {
-      bdis.displayMiss();
+      bdis.displayMiss(isComputer.get(player_num), player_num);
     }
     if (stack_remaining.get(1 - player_num) == 0) {
       bdis.displayWin(player_num);
       this.game_over = true;
+      System.exit(0);
     }
     return true;
   }
@@ -219,27 +229,27 @@ public class Game {
     if (move_remaining.get(player_num) == 0) {
       return false;
     }
-    bdis.displayTwo(player_num);
-    bdis.displayWhich(player_num);
-    if (!scan.hasNext()) {
+    bdis.displayTwo(player_num, isComputer.get(player_num));
+    bdis.displayWhich(player_num, isComputer.get(player_num));
+    if (!isComputer.get(player_num) && !scan.hasNext()) {
       return false;
     }
-    String which = scan.next();
+    String which = isComputer.get(player_num) ? rg.generateChoose() : scan.next();
     DigParser whichParser = new DigParser(which);
     int old_row = whichParser.getRow();
     int old_col = whichParser.getCol();
     if (!whichParser.isValidFormat() || !boards.get(player_num).getCell(old_row, old_col).getIsPlaced()) {
-      bdis.displayInvalidMove();
+      bdis.displayInvalidMove(isComputer.get(player_num));
       return false;
     }
-    bdis.displayWhereTo(player_num);
-    if (!scan.hasNext()) {
+    bdis.displayWhereTo(player_num, isComputer.get(player_num));
+    if (!isComputer.get(player_num) && !scan.hasNext()) {
       return false;
     }
-    String where = scan.next();
+    String where = isComputer.get(player_num) ? rg.generatePlace() : scan.next();
     InitialParser whereParser = new InitialParser(where);
     if (!whereParser.isValidFormat()) {
-      bdis.displayInvalidFormat();
+      bdis.displayInvalidFormat(isComputer.get(player_num));
       return false;
     }
     int new_row = whereParser.getRow();
@@ -249,31 +259,34 @@ public class Game {
     
     if (old_id <= 1) {
       if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Green", player_num) != SUCCESS) {
-        bdis.displayInvalidMove();
+        bdis.displayInvalidMove(isComputer.get(player_num));
         return false;
       }
     }
     else if (old_id <= 4) {
       if (placeRectangle(new_row, new_col, new_dir, old_id - 1, "Purple", player_num) != SUCCESS) {
-        bdis.displayInvalidMove();
+        bdis.displayInvalidMove(isComputer.get(player_num));
         return false;
       }
     }
     else if (old_id <= 7) {
       if (placeSuper(new_row, new_col, new_dir, old_id - 1, "Red", player_num) != SUCCESS) {
-        bdis.displayInvalidMove();
+        bdis.displayInvalidMove(isComputer.get(player_num));
         return false;
       }
     }
     else {
       if (placeCrazy(new_row, new_col, new_dir, old_id - 1, "Blue", player_num) != SUCCESS) {
-        bdis.displayInvalidMove();
+        bdis.displayInvalidMove(isComputer.get(player_num));
         return false;
       }
     }
     ArrayList<Integer> hitList = remove(old_row, old_col, boards.get(player_num));
     moveHit(new_row, new_col, hitList, old_id, boards.get(player_num));
-    bdis.displayTwo(player_num);
+    bdis.displayTwo(player_num, isComputer.get(player_num));
+    if (isComputer.get(player_num)) {
+      bdis.displaySpecial(player_num);
+    }
     move_remaining.set(player_num, move_remaining.get(player_num) - 1);
     return true;
   }
@@ -310,21 +323,21 @@ public class Game {
     if (sonar_remaining.get(player_num) == 0) {
       return false;
     }
-    bdis.displayTwo(player_num);
-    bdis.displaySonar(player_num);
-    if (!scan.hasNext()) {
+    bdis.displayTwo(player_num, isComputer.get(player_num));
+    bdis.displaySonar(player_num, isComputer.get(player_num));
+    if (!isComputer.get(player_num) && !scan.hasNext()) {
       return false;
     }
-    String where = scan.next();
+    String where = isComputer.get(player_num) ? rg.generateChoose() : scan.next();
     DigParser whichParser = new DigParser(where);
     int row = whichParser.getRow();
     int col = whichParser.getCol();
     if (!whichParser.isValidFormat()) {
-      bdis.displayInvalidFormat();
+      bdis.displayInvalidFormat(isComputer.get(player_num));
       return false;
     }
     ArrayList<Integer> list = sonarHelper(row, col, boards.get(1 - player_num));
-    bdis.displaySonarResult(list);
+    bdis.displaySonarResult(list, isComputer.get(player_num), player_num);
     sonar_remaining.set(player_num, sonar_remaining.get(player_num) - 1);
     return true;
   }
@@ -332,12 +345,12 @@ public class Game {
   private void oneTurn(int player_num) {
     boolean valid = false;
     while (!valid) {
-      bdis.displayTwo(player_num);
-      bdis.displayOptions(player_num, move_remaining.get(player_num), sonar_remaining.get(player_num));
-      if (!scan.hasNext()) {
+      bdis.displayTwo(player_num, isComputer.get(player_num));
+      bdis.displayOptions(player_num, move_remaining.get(player_num), sonar_remaining.get(player_num), isComputer.get(player_num));
+      if (!isComputer.get(player_num) && !scan.hasNext()) {
         return;
       }
-      String input = scan.next();
+      String input = isComputer.get(player_num) ? rg.generateOptions() : scan.next();
       if (input.equals("D") || input.equals("d")) {
         valid = oneDig(player_num);
       }
@@ -350,10 +363,25 @@ public class Game {
     }
   }
 
+  public void humanOrComputer() {
+    for (int player = PLAYER_A; player <= PLAYER_B; player++) {
+      bdis.displayIsComputer(player);
+      if (!scan.hasNext()) {
+        return;
+      }
+      String ans = scan.next();
+      if (ans.equals("y") || ans.equals("Y")) {
+        isComputer.set(player, true);
+      }
+    }
+  }
+
   public void initialize() {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
-      bdis.displaySingle(player);
-      bdis.displayWelcome(player);
+      if (!isComputer.get(player)) {
+        bdis.displaySingle(player, false);
+        bdis.displayWelcome(player, false);
+      }
       placeStash(player, "Green", 2, bdis);
       placeStash(player, "Purple", 3, bdis);
       placeStash(player, "Red", 3, bdis);
@@ -364,8 +392,6 @@ public class Game {
   public void start() {
     bdis.displayStart();
     while (!this.game_over) {
-      // oneDig(PLAYER_A);
-      // oneDig(PLAYER_B);
       oneTurn(PLAYER_A);
       oneTurn(PLAYER_B);
     }

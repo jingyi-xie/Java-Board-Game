@@ -25,7 +25,10 @@ public class Display {
     System.out.println(col_index);
   }
 
-  public void displayWelcome(int player_num) {
+  public void displayWelcome(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     StringBuilder sb = new StringBuilder();
     sb.append(player[player_num]);
     sb.append(", you are going place Sally’s stash on the board. Make sure ");
@@ -47,25 +50,37 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
-  public void displayInvalidFormat() {
+  public void displayInvalidFormat(boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                       Invalid input format, try again!                  ");
     System.out.println("=========================================================================");
   }
 
-  public void displayOutOfGrid() {
+  public void displayOutOfGrid(boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                     Location out of grid, try again!                    ");
     System.out.println("=========================================================================");
   }
 
-  public void displayCollide() {
+  public void displayCollide(boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                  Collide with another stack, try again!                 ");
     System.out.println("=========================================================================");
   }
 
-  public void displaySingle(int player_num) {
+  public void displaySingle(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     printSingleNum();
     LineDisplay ld = new LineDisplay(boards.get(player_num));
     for (int i = 0; i < 20; i++) {
@@ -76,7 +91,10 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displayTwo(int player_num) {
+  public void displayTwo(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println(player[player_num] + "'s turn:");
     System.out.print("      Your tree                ");
     System.out.print("                      ");
@@ -94,7 +112,10 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displayWhere(int player_num) {
+  public void displayWhere(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println(player[player_num] + ", where do you want to dig " + player[1 - player_num] + "'s board?");
     System.out.println("-------------------------------------------------------------------------");
   }
@@ -105,25 +126,43 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
-  public void displayHit() {
+  public void displayHit(boolean isComputer, int player_num) {
+    if (isComputer) {
+      System.out.println("=========================================================================");
+      System.out.println(player[player_num] + " found your stack!");
+      System.out.println("=========================================================================");
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                          You found a stack!                             ");
     System.out.println("=========================================================================");
   }
 
-  public void displayMiss() {
+  public void displayMiss(boolean isComputer, int player_num) {
+    if (isComputer) {
+      System.out.println("=========================================================================");
+      System.out.println(player[player_num] + " missed!");
+      System.out.println("=========================================================================");
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                              You missed!                                ");
     System.out.println("=========================================================================");
   }
 
-  public void displayWrongDir() {
+  public void displayWrongDir(boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                 Orientation not compatible with the stack!              ");
     System.out.println("=========================================================================");
   }
 
-  public void displayOptions(int player_num, int move_remain, int sonar_remain) {
+  public void displayOptions(int player_num, int move_remain, int sonar_remain, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("Possible actions for " + player[player_num]);
     System.out.println();
     System.out.println("D Dig in a square");
@@ -134,32 +173,62 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displayWhich(int player_num) {
+  public void displayWhich(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println(player[player_num] + ", which stack do you want to move?");
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displayWhereTo(int player_num) {
+  public void displayWhereTo(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println(player[player_num] + ", where do you want to move the stack to?");
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displayInvalidMove() {
+  public void displayInvalidMove(boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println("=========================================================================");
     System.out.println("                              Invalid move!                              ");
     System.out.println("=========================================================================");
   }
 
-  public void displaySonar(int player_num) {
+  public void displaySonar(int player_num, boolean isComputer) {
+    if (isComputer) {
+      return;
+    }
     System.out.println(player[player_num] + ", please choose the center coordinate of the sonar scan.");
     System.out.println("-------------------------------------------------------------------------");
   }
 
-  public void displaySonarResult(ArrayList<Integer> list) {
+  public void displaySonarResult(ArrayList<Integer> list, boolean isComputer, int player_num) {
+    if (isComputer) {
+      System.out.println("=========================================================================");
+      System.out.println(player[player_num] + " used a special action!");
+      System.out.println("=========================================================================");
+      return;
+    }
     System.out.println("Green stacks occupy " + list.get(0) + " squares");
     System.out.println("Purple stacks occupy " + list.get(1) + " squares");
     System.out.println("Red stacks occupy " + list.get(2) + " squares");
     System.out.println("Blue stacks occupy " + list.get(3) + " squares");
+    System.out.println("-------------------------------------------------------------------------");
+  }
+
+  public void displaySpecial(int player_num) {
+    System.out.println("=========================================================================");
+    System.out.println(player[player_num] + " used a special action!");
+    System.out.println("=========================================================================");
+  }
+
+  public void displayIsComputer(int player_num) {
+    System.out.println("-------------------------------------------------------------------------");
+    System.out.println(player[player_num] + ", are you a computer(Y/N)?");
     System.out.println("-------------------------------------------------------------------------");
   }
 
