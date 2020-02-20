@@ -195,11 +195,7 @@ public class Game {
         if (bd.getCell(i, j).getStashId() == removeId && bd.getCell(i, j).getIsPlaced()) {
           Cell curCell = bd.getCell(i, j);
           if (curCell.getIsHit()) {
-            curCell.setWasHit();
             res.add(curCell.getOrder());
-          }
-          else if (curCell.getIsMiss()) {
-            curCell.setWasMiss();
           }
           curCell.remove();
         }
@@ -358,10 +354,10 @@ public class Game {
     for (int player = PLAYER_A; player <= PLAYER_B; player++) {
       bdis.displaySingle(player);
       bdis.displayWelcome(player);
-      placeStash(player, "Green", 1, bdis);
-      placeStash(player, "Purple", 1, bdis);
-      placeStash(player, "Red", 1, bdis);
-      placeStash(player, "Blue", 1, bdis);
+      placeStash(player, "Green", 2, bdis);
+      placeStash(player, "Purple", 3, bdis);
+      placeStash(player, "Red", 3, bdis);
+      placeStash(player, "Blue", 3, bdis);
     }
   }
 
