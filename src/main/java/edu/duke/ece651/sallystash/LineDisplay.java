@@ -19,10 +19,13 @@ public class LineDisplay {
         else if (CASE == AS_SELF) {
           System.out.print(cur.getColor());
         }
-        else if (cur.getIsHit() == true && CASE == AS_OPP){
+        else if (CASE == AS_OPP && cur.getIsHit() && cur.getShowOppo()) {
           System.out.print(cur.getColor());
         }
-        else if (cur.getIsMiss() == true && CASE == AS_OPP){
+        else if (CASE == AS_OPP && cur.getWasHit()) {
+          System.out.print(cur.getOldColor());
+        }
+        else if (CASE == AS_OPP && ((cur.getIsMiss() && cur.getShowOppo()) || cur.getWasMiss())) {
           System.out.print('X');
         }
         else {
