@@ -53,12 +53,11 @@ public class Crazystack implements Shape {
             occupiedHelper(x, y + 2, bd) || occupiedHelper(x - 1, y + 2, bd) || 
             occupiedHelper(x - 1, y + 3, bd) || occupiedHelper(x - 1, y + 4, bd);
         }
-        else if (this.orientation == LEFT) {
+        else {
             return occupiedHelper(x, y, bd) || occupiedHelper(x, y + 1, bd) || 
             occupiedHelper(x, y + 2, bd) || occupiedHelper(x + 1, y + 2, bd) || 
             occupiedHelper(x + 1, y + 3, bd) || occupiedHelper(x + 1, y + 4, bd);
         }
-        return false;
     }
 
     private void placeHelper(int x, int y, Board bd, int order) {

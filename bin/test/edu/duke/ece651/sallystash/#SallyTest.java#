@@ -1,20 +1,15 @@
-package edu.duke.ece651.sallystash;
+xcpackage edu.duke.ece651.sallystash;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.io.FileInputStream;
 
 import org.junit.jupiter.api.Test;
 
-import jdk.jfr.Timestamp;
-
 public class SallyTest {
   @Test
-  public void test_booard() {
-      Board bd = new Board();
+  public void test_board() {
+  	  Board bd = new Board();
       assertFalse(bd.tryDig(5, 5));
       Cell cur = bd.getCell(5, 5);
       assertTrue(cur.getIsMiss());
@@ -57,19 +52,19 @@ public class SallyTest {
     InitialParser ip1 = new InitialParser("A3h");
     assertTrue(ip1.getRow() == 0);
     assertTrue(ip1.getCol() == 3);
-    //assertFalse(ip1.getDir());
+    assertFalse(ip1.getDir());
     InitialParser ip2 = new InitialParser("b4H");
     assertTrue(ip2.getRow() == 1);
     assertTrue(ip2.getCol() == 4);
-    //assertFalse(ip2.getDir());
+    assertFalse(ip2.getDir());
     InitialParser ip3 = new InitialParser("c5V");
     assertTrue(ip3.getRow() == 2);
     assertTrue(ip3.getCol() == 5);
-    //assertTrue(ip3.getDir());
+    assertTrue(ip3.getDir());
     InitialParser ip4 = new InitialParser("D6V");
     assertTrue(ip4.getRow() == 3);
     assertTrue(ip4.getCol() == 6);
-    //assertTrue(ip4.getDir());
+    assertTrue(ip4.getDir());
     InitialParser ip5 = new InitialParser("aaaaaaa");
     assertFalse(ip5.isValidFormat());
     InitialParser ip6 = new InitialParser("aah");
@@ -96,16 +91,39 @@ public class SallyTest {
   } 
 
   @Test
-  public void test_twoComputer() throws FileNotFoundException {
-    System.setIn(new FileInputStream("./src/test/resources/twocomputers.txt"));
-    Launcher l = new Launcher();
-    l.main(null);
+  public void test_rectangle() {
+      Rectangle rc = new Rectangle(1, 'g', 2, 1);
+      Board bd = new Board();
+      bd.getCell(5, 5).setIsPlaced();
+      rc.putOnBoard(5, 4, bd);
+      rc.putOnBoard(10, 4, bd);
+      rc.putOnBoard(10, 10, bd);
   }
 
   @Test
-  public void test_Person() throws FileNotFoundException {
-    System.setIn(new FileInputStream("./src/test/resources/person.txt"));
-    Launcher l = new Launcher();
-    l.main(null);
+  public void test_display() {
+    ArrayList<Board> boards = new ArrayList<>();
+    boards.add(new Board());
+    boards.add(new Board());
+    Display dp = new Display(boards);
+    dp.displayWelcome(0);
+    dp.displayStart();
+    dp.displayInvalidFormat();
+    dp.displayOutOfGrid();
+    dp.displayCollide();
+    dp.displaySingle(0);
+    dp.displayTwo(0);
+    dp.displayWhere(0);
+    dp.displayWin(0);
+    dp.displayHit();
+    dp.displayMiss();
   }
+
+  @Test
+  public void test_game() {
+      Game gm = new Game();
+      gm.initialize();
+      gm.start();
+  }
+
 }

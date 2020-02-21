@@ -25,22 +25,19 @@ public class Display {
     System.out.println(col_index);
   }
 
-  public void displayWelcome(int player_num, boolean isComputer) {
-    if (isComputer) {
-      return;
-    }
+  public void displayWelcome(int player_num) {
     StringBuilder sb = new StringBuilder();
     sb.append(player[player_num]);
     sb.append(", you are going place Sally’s stash on the board. Make sure ");
     sb.append(player[1 - player_num]);
     sb.append(" isn’t \n");
     sb.append("looking! For each stack, type the coordinate of the upper left side of the stash,\n");
-    sb.append("followed by either H (for horizontal) or V (for vertical). For example, M4H would \n");
+    sb.append("followed by H, V, U, R, D, L. For example, M4H would \n");
     sb.append("place a stack horizontally starting at M4 and going to the right. You have\n");
     sb.append("2 Green stacks that are 1x2\n");
     sb.append("3 Purple stacks that are 1x3\n");
-    sb.append("3 Red stacks that are 1x4\n");
-    sb.append("3 Blue stacks that are 1x6\n");
+    sb.append("3 Red stacks\n");
+    sb.append("3 Blue stacks\n");
     System.out.println(sb.toString());
   }
 
@@ -50,10 +47,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
-  public void displayInvalidFormat(boolean isComputer) {
-    if (isComputer) {
-      return;
-    }
+  public void displayInvalidFormat() {
     System.out.println("=========================================================================");
     System.out.println("                       Invalid input format, try again!                  ");
     System.out.println("=========================================================================");

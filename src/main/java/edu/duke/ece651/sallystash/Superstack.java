@@ -50,11 +50,10 @@ public class Superstack implements Shape {
             return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || 
             occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y + 1, bd);
         }
-        else if (this.orientation == LEFT) {
+        else {
             return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || 
             occupiedHelper(x + 2, y, bd) || occupiedHelper(x + 1, y - 1, bd);
         }
-        return false;
     }
 
     private void placeHelper(int x, int y, Board bd, int order) {
