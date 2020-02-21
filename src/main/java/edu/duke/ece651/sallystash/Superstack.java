@@ -5,11 +5,13 @@ public class Superstack implements Shape {
     private int id;
     private int orientation;
   
+    //Constructor for superstack
     public Superstack(int id, int ori) {
       this.id = id;
       this.orientation = ori;
     }
   
+    //Check if the coordinate (x, y) goes out of boundary
     private int checkBoundary(int x, int y, Board bd) {
         if (this.orientation == UP) {
             if ((x < 0) || (x > 18) || (y < 1) || (y > 8)) {
@@ -37,6 +39,7 @@ public class Superstack implements Shape {
     private boolean occupiedHelper(int x, int y, Board bd) {
         return bd.getCell(x, y).getIsPlaced();
     }
+    //Check if the new stash will collide with others
     private boolean checkOccupied(int x, int y, Board bd) {
         if (this.orientation == UP) {
             return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y - 1, bd) || 
@@ -56,6 +59,7 @@ public class Superstack implements Shape {
         }
     }
 
+    //Helper function to place the new stash
     private void placeHelper(int x, int y, Board bd, int order) {
         Cell curCell = bd.getCell(x, y);
         curCell.setIsPlaced();
@@ -64,6 +68,7 @@ public class Superstack implements Shape {
         curCell.setStashId(this.id);
     }
 
+    //Put the current superstask on board, according to its orientation
     @Override
     public int putOnBoard(int x, int y, Board bd) {
         if (checkBoundary(x, y, bd) == OUT_OF_GRID) {

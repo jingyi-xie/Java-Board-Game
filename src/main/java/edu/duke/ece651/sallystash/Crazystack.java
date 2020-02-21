@@ -5,11 +5,13 @@ public class Crazystack implements Shape {
     private int id;
     private int orientation;
   
+    //Constructor for crazystack
     public Crazystack(int id, int ori) {
       this.id = id;
       this.orientation = ori;
     }
   
+    //Check if the coordinate (x, y) goes out of boundary
     private int checkBoundary(int x, int y, Board bd) {
         if (this.orientation == UP) {
             if ((x < 0) || (x > 15) || (y < 0) || (y > 8)) {
@@ -37,6 +39,7 @@ public class Crazystack implements Shape {
     private boolean occupiedHelper(int x, int y, Board bd) {
         return bd.getCell(x, y).getIsPlaced();
     }
+    //Check if the new stash will collide with others
     private boolean checkOccupied(int x, int y, Board bd) {
         if (this.orientation == UP) {
             return occupiedHelper(x, y, bd) || occupiedHelper(x + 1, y, bd) || 
@@ -60,6 +63,7 @@ public class Crazystack implements Shape {
         }
     }
 
+    //Helper function to place the new stash
     private void placeHelper(int x, int y, Board bd, int order) {
         Cell curCell = bd.getCell(x, y);
         curCell.setIsPlaced();
@@ -68,6 +72,7 @@ public class Crazystack implements Shape {
         curCell.setStashId(this.id);
     }
 
+    //Put the current crazystask on board, according to its orientation
     @Override
     public int putOnBoard(int x, int y, Board bd) {
         if (checkBoundary(x, y, bd) == OUT_OF_GRID) {

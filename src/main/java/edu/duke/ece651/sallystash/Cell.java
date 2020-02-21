@@ -2,17 +2,18 @@ package edu.duke.ece651.sallystash;
 
 public class Cell {
   private char color;
-  private char old_color;
+  private char old_color; //useful after move, opponent won't gain extra info
   private boolean isPlaced;
   private boolean isHit;
   private boolean isMiss;
-  private boolean wasHit;
-  private boolean wasMiss;
-  private boolean showOpp;
+  private boolean wasHit; //useful after move
+  private boolean wasMiss; //useful after move
+  private boolean showOpp; //if a hit mark is moved,opponent will not see the new mark
 
-  private int stashId;
-  private int order;
+  private int stashId; //the id the stash that the cell resides in
+  private int order; //the order of each cell in the stack, useful when move hit mark
 
+  //Constructor for Cell
   public Cell() {
     this.color = ' ';
     this.old_color = ' ';
@@ -41,6 +42,7 @@ public class Cell {
   public boolean getIsPlaced() {
     return this.isPlaced;
   }
+  //Set hit: opponent can now see the hit mark, clear wasHit and wasMiss
   public void setIsHit() {
     this.showOpp = true;
     this.wasHit = false;
@@ -50,6 +52,7 @@ public class Cell {
   public boolean getIsHit() {
     return this.isHit;
   }
+  //Set Miss: opponent can now see the miss mark, clear wasHit and wasMiss
   public void setIsMiss() {
     this.showOpp = true;
     this.wasHit = false;
@@ -89,6 +92,7 @@ public class Cell {
   public boolean getShowOppo() {
     return this.showOpp;
   }
+  //Remove the current cell, set wasHit, old_color and wasMiss when necessary
   public void remove() {
     this.isPlaced = false;
     if (this.isHit) {
@@ -105,6 +109,4 @@ public class Cell {
     this.stashId = -1;
     this.order = -1;
   }
-
-
 }

@@ -6,6 +6,7 @@ public class Rectangle implements Shape {
   private int length;
   private int height;
 
+  //Constructor for rectangle
   public Rectangle(int id, char color, int len, int ht) {
     this.id = id;
     this.color = color;
@@ -13,11 +14,14 @@ public class Rectangle implements Shape {
     this.height = ht;
   }
 
+  //Put the current rectangle on board
   @Override
   public int putOnBoard(int x, int y, Board bd) {
+    //Check if goes out of grid
     if ((x < 0) || (x > 19) || (x + height > 20) || (y < 0) || (y > 9) || (y + length > 10)) {
       return OUT_OF_GRID;
     }
+    //Check if collides with others
     for (int i = x; i < x + this.height; i++) {
       for (int j = y; j < y + this.length; j++) {
           Cell curCell = bd.getCell(i, j);

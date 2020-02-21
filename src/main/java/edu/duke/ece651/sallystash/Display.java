@@ -9,10 +9,13 @@ public class Display {
   final String player[] = {"Player A", "Player B"};
 
   private ArrayList<Board> boards;
+
+  //Constructor for the display
   public Display(ArrayList<Board> list) {
     this.boards = list;
   }
 
+  //Helper functions to print the numbers and '|'
   private void printTwoNum() {
     char[] col_index = {' ', ' ','0', '|', '1', '|', '2', '|', '3', '|', '4', '|', '5', '|', '6', '|', '7', '|', '8', '|', '9', ' ', ' '};
     System.out.print(col_index);
@@ -25,6 +28,7 @@ public class Display {
     System.out.println(col_index);
   }
 
+  //Instructions for placing the stash at the start of the game
   public void displayWelcome(int player_num) {
     StringBuilder sb = new StringBuilder();
     sb.append(player[player_num]);
@@ -32,8 +36,8 @@ public class Display {
     sb.append(player[1 - player_num]);
     sb.append(" isn’t \n");
     sb.append("looking! For each stack, type the coordinate of the upper left side of the stash,\n");
-    sb.append("followed by H, V, U, R, D, L. For example, M4H would \n");
-    sb.append("place a stack horizontally starting at M4 and going to the right. You have\n");
+    sb.append("followed by H, V, U, R, D, L. For example, M4H would place a stack horizontally\n");
+    sb.append("starting at M4 and going to the right. You have\n");
     sb.append("2 Green stacks that are 1x2\n");
     sb.append("3 Purple stacks that are 1x3\n");
     sb.append("3 Red stacks\n");
@@ -41,18 +45,21 @@ public class Display {
     System.out.println(sb.toString());
   }
 
+  //Display the start of the game
   public void displayStart() {
     System.out.println("=========================================================================");
     System.out.println("                               Game begins                               ");
     System.out.println("=========================================================================");
   }
 
+  //Display the input format is invalid
   public void displayInvalidFormat() {
     System.out.println("=========================================================================");
     System.out.println("                       Invalid input format, try again!                  ");
     System.out.println("=========================================================================");
   }
 
+  //Display the location goes out of grid
   public void displayOutOfGrid(boolean isComputer) {
     if (isComputer) {
       return;
@@ -62,6 +69,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display the stash collide with others
   public void displayCollide(boolean isComputer) {
     if (isComputer) {
       return;
@@ -71,6 +79,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display a single board when placing stash at the beginning
   public void displaySingle(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -85,6 +94,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display two boards: the current player and its opponent
   public void displayTwo(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -106,6 +116,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display the location to dig
   public void displayWhere(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -113,6 +124,8 @@ public class Display {
     System.out.println(player[player_num] + ", where do you want to dig " + player[1 - player_num] + "'s board?");
     System.out.println("-------------------------------------------------------------------------");
   }
+
+  //Display the end of the game and the winner
   public void displayWin(int player_num) {
     System.out.println("=========================================================================");
     System.out.println("                              Game Over!                                 ");
@@ -120,6 +133,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display a dig is successful
   public void displayHit(boolean isComputer, int player_num) {
     if (isComputer) {
       System.out.println("=========================================================================");
@@ -132,6 +146,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display a dig fails
   public void displayMiss(boolean isComputer, int player_num) {
     if (isComputer) {
       System.out.println("=========================================================================");
@@ -144,6 +159,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display the wrong input directions, e.g. "U" for rectangle
   public void displayWrongDir(boolean isComputer) {
     if (isComputer) {
       return;
@@ -153,6 +169,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display the options: D, M, S
   public void displayOptions(int player_num, int move_remain, int sonar_remain, boolean isComputer) {
     if (isComputer) {
       return;
@@ -167,6 +184,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display which stash to move
   public void displayWhich(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -175,6 +193,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display where to move the stash
   public void displayWhereTo(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -183,6 +202,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display the move is invalid
   public void displayInvalidMove(boolean isComputer) {
     if (isComputer) {
       return;
@@ -192,6 +212,7 @@ public class Display {
     System.out.println("=========================================================================");
   }
 
+  //Display the instruction for Sonar
   public void displaySonar(int player_num, boolean isComputer) {
     if (isComputer) {
       return;
@@ -200,6 +221,7 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Display the result of sonar
   public void displaySonarResult(ArrayList<Integer> list, boolean isComputer, int player_num) {
     if (isComputer) {
       System.out.println("=========================================================================");
@@ -214,12 +236,14 @@ public class Display {
     System.out.println("-------------------------------------------------------------------------");
   }
 
+  //Desplay that the computer uses a special action
   public void displaySpecial(int player_num) {
     System.out.println("=========================================================================");
     System.out.println(player[player_num] + " used a special action!");
     System.out.println("=========================================================================");
   }
 
+  //Ask if each player is a computer at the beginning
   public void displayIsComputer(int player_num) {
     System.out.println("-------------------------------------------------------------------------");
     System.out.println(player[player_num] + ", are you a computer(Y/N)?");

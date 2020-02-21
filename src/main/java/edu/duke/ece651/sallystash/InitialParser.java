@@ -9,6 +9,8 @@ public class InitialParser extends Parser{
     final int LEFT = 5;
 
     private int orientation;
+
+    //Constructor for initialParser: row + col + orientation
     public InitialParser(String input) {
         this.is_validFormat = (input.length() == 3);
         if (this.is_validFormat) {
@@ -42,6 +44,8 @@ public class InitialParser extends Parser{
         }
           
     }
+
+    //Get the orientation
     public int getDir() {
         return this.orientation;
     }

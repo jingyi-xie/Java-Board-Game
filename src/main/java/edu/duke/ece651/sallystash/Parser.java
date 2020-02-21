@@ -1,5 +1,6 @@
 package edu.duke.ece651.sallystash;
 
+//Abstract class for initialParser and digParser
 abstract class Parser {
     int row;
     int col;

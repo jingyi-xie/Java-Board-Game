@@ -1,5 +1,6 @@
 package edu.duke.ece651.sallystash;
 
+//Interface for rectangle, super and crazy
 interface Shape {
   final int OCCUPIED = 0;
   final int OUT_OF_GRID = 1;

@@ -5,9 +5,13 @@ public class LineDisplay {
     final int AS_OPP = 1;
 
     private Board board;
+
+    //Constructor for LineDisplay
     public LineDisplay(Board b) {
       this.board = b;
     }
+
+    //Display one line according to if its for itself or opponent
     public void displayLine(int CASE, int index) {
       int letter = (char)65 + index;
       System.out.print((char)letter + " ");

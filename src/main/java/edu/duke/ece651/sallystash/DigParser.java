@@ -1,6 +1,7 @@
 package edu.duke.ece651.sallystash;
 
 public class DigParser extends Parser{
+    //Pasrse row and col
     public DigParser(String input) {
         this.is_validFormat = (input.length() == 2);
         if (this.is_validFormat) {
